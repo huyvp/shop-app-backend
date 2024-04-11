@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.app.shop.constant.DTOConstants.Category.EMPTY_MSG;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class CategoryDTO {
-    @NotEmpty(message = "Category' name can not be empty")
+    @NotEmpty(message = EMPTY_MSG)
     private String name;
 }

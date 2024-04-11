@@ -1,25 +1,31 @@
 package com.app.shop.controller;
 
+import com.app.shop.dto.ProductDTO;
+import jakarta.validation.Valid;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("api/v1/product")
+@RequestMapping("api/v1/products")
 public class ProductController {
     @GetMapping("")
-    public ResponseEntity<?> getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit){
-        return ResponseEntity.ok("Product");
+    public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit){
+        return "Get all product";
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable int id){
-        return ResponseEntity.ok("Product by id");
+    public String getProductById(@PathVariable int id){
+        return "Product by id";
     }
     @PostMapping("")
-    public ResponseEntity<?> insertProduct(){
-        return ResponseEntity.ok("Product");
+    public String createProduct(@RequestBody @Valid ProductDTO productDTO){
+        return "Create Product";
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable int id){
-        return ResponseEntity.ok("Product");
+    public String deleteProduct(@PathVariable int id){
+        return "Delete Product";
     }
 }
