@@ -1,0 +1,9 @@
+${Ansi.GREEN}=======================================
+${Ansi.GREEN}   Power by Spring Boot
+${Ansi.GREEN}   Project: Shop app
+${Ansi.GREEN}   Author: huyn29
+${Ansi.GREEN}   GitHub: https://github.com/huyn29
+${Ansi.GREEN}   Start Date: 8/4/2024
+${Ansi.GREEN}   Tech Stack:
+${Ansi.GREEN}=======================================
+${Ansi.GREEN} :: Spring Boot${spring-boot.formatted-version} :: ${Ansi.DEFAULT}
