@@ -1,5 +1,8 @@
 package com.app.shop.exception;
 
+import com.app.shop.exception.media.FileFormatNotSupportException;
+import com.app.shop.exception.media.FileSizeException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,18 +15,52 @@ import java.util.Date;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleAllException(Exception e){
-        return new ErrorResponse(new Date(), 1000, HttpStatus.INTERNAL_SERVER_ERROR.name(), e.getMessage());
+    public ErrorResponse handleAllException(Exception ex, HttpServletRequest request){
+          return ErrorResponse.builder()
+                  .timestamp(new Date())
+                  .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                  .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                  .message(ex.getMessage())
+                  .path(request.getRequestURI())
+                  .build();
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBindException(BindException e){
+    public ErrorResponse handleBindException(BindException ex, HttpServletRequest request){
         String msg = "";
-        if (e.getBindingResult().hasErrors()){
-            msg = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        if (ex.getBindingResult().hasErrors()){
+            msg = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         }
-        return new ErrorResponse(new Date(),1004, HttpStatus.BAD_REQUEST.name(),msg);
+        return ErrorResponse.builder()
+                .timestamp(new Date())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST)
+                .message(msg)
+                .path(request.getRequestURI())
+                .build();
     }
 
+    @ExceptionHandler(FileSizeException.class)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+    public ErrorResponse handleFileSizeException(FileSizeException ex, HttpServletRequest request){
+        return ErrorResponse.builder()
+                .timestamp(new Date())
+                .code(HttpStatus.PAYLOAD_TOO_LARGE.value())
+                .status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+    }
+    @ExceptionHandler(FileFormatNotSupportException.class)
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    public ErrorResponse handleFileFormatNotSupportException(FileFormatNotSupportException ex, HttpServletRequest request){
+        return ErrorResponse.builder()
+                .timestamp(new Date())
+                .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
+                .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+    }
 }

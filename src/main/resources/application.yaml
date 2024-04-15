@@ -1,2 +1,6 @@
 server:
   port: 1892
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
