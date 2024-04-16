@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 import static com.app.shop.constant.DTOConstants.Product.*;
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +27,5 @@ public class ProductDTO {
     private String description;
     @JsonProperty("category_id")
     private String categoryId;
-    private MultipartFile file;
+    private List<MultipartFile> files;
 }
