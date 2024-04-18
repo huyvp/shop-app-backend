@@ -1,7 +1,5 @@
 package com.app.shop.exception;
 
-import com.app.shop.exception.media.FileFormatNotSupportException;
-import com.app.shop.exception.media.FileSizeException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;

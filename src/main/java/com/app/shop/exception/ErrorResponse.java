@@ -16,7 +16,7 @@ import static com.app.shop.constant.Constants.Pattern.*;
 @Data
 @Builder
 public class ErrorResponse {
-    @JsonFormat(pattern = TIME)
+    @JsonFormat(pattern = TIME, timezone = "Asia/Bangkok")
     private Date timestamp;
     private int code;
     private HttpStatus status;

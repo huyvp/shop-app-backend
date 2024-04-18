@@ -4,3 +4,5 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+api:
+  prefix: api/v1

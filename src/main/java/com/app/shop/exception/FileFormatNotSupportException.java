@@ -1,4 +1,4 @@
-package com.app.shop.exception.media;
+package com.app.shop.exception;
 
 public class FileFormatNotSupportException extends RuntimeException {
     public FileFormatNotSupportException(String message) {

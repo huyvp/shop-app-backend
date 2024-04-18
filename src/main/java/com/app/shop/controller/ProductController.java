@@ -1,8 +1,8 @@
 package com.app.shop.controller;
 
 import com.app.shop.dto.ProductDTO;
-import com.app.shop.exception.media.FileFormatNotSupportException;
-import com.app.shop.exception.media.FileSizeException;
+import com.app.shop.exception.FileFormatNotSupportException;
+import com.app.shop.exception.FileSizeException;
 import jakarta.validation.Valid;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static com.app.shop.constant.Constants.Pattern.DATE;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("${api.prefix}/products")
 public class ProductController {
     @GetMapping("")
     public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
@@ -36,7 +35,6 @@ public class ProductController {
 
     @PostMapping("")
     public String createProduct(@Valid @ModelAttribute ProductDTO productDTO) throws IOException {
-        // Check file size > 10MB = 1048576 Bytes
         List<MultipartFile> files = productDTO.getFiles();
         files = files == null ? new ArrayList<>(0) : files;
         for (MultipartFile file : files) {
@@ -69,7 +67,7 @@ public class ProductController {
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
         String timestamp = dateFormat.format(new Date());
-        return sb.append(timestamp).append("_").append(nameDefault).toString();
+        return sb.append(timestamp).append(".png").toString();
     }
 
     @DeleteMapping("/{id}")
