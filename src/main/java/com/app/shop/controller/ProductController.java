@@ -23,16 +23,6 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 @RestController
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
-    @GetMapping("")
-    public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        return "Get all product";
-    }
-
-    @GetMapping("/{id}")
-    public String getProductById(@PathVariable int id) {
-        return "Product by id";
-    }
-
     @PostMapping("")
     public String createProduct(@Valid @ModelAttribute ProductDTO productDTO) throws IOException {
         List<MultipartFile> files = productDTO.getFiles();
@@ -51,7 +41,7 @@ public class ProductController {
         return "DONE";
     }
 
-    private String storeFile(MultipartFile file) throws IOException {
+    private void storeFile(MultipartFile file) throws IOException {
         String filename = StringUtils.cleanPath(file.getOriginalFilename() != null ? file.getOriginalFilename() : "");
         String uniqueFileName = generateUniqueName(filename);
         Path uploadDir = Paths.get("uploads");
@@ -60,7 +50,6 @@ public class ProductController {
         }
         Path destination = Paths.get(uploadDir.toString(), uniqueFileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-        return uniqueFileName;
     }
 
     private String generateUniqueName(String nameDefault) {
@@ -69,7 +58,15 @@ public class ProductController {
         String timestamp = dateFormat.format(new Date());
         return sb.append(timestamp).append(".png").toString();
     }
+    @GetMapping("")
+    public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        return "Get all product";
+    }
 
+    @GetMapping("/{id}")
+    public String getProductById(@PathVariable int id) {
+        return "Product by id";
+    }
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable int id) {
         return "Delete Product";
