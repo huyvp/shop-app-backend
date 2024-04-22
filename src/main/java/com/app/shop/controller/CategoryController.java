@@ -12,11 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
-    @PostMapping("")
+    @PostMapping
     public String createCategories(@RequestBody @Valid CategoryDTO categoryDTO){
         return "Create category";
     }
-    @GetMapping("")
+    @GetMapping
     public String getAllCategories(@RequestParam("page") int  page, @RequestParam("limit") int limit){
         return "Get all category";
     }
@@ -26,6 +26,6 @@ public class CategoryController {
     }
     @DeleteMapping("{id}")
     public String deleteCategories(@Valid @PathVariable int id){
-        return "Create category";
+        return "Delete category";
     }
 }

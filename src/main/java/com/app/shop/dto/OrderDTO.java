@@ -29,8 +29,10 @@ public class OrderDTO {
     @JsonProperty("shipping_method")
     @NotBlank(message = "Shipping method is required")
     private String shippingMethod;
+    @JsonProperty("shipping_address")
     @NotBlank(message = "Shipping address is required")
     private String shippingAddress;
+    @JsonProperty("payment_method")
     @NotBlank(message = "Payment method is required")
     private String paymentMethod;
 }
