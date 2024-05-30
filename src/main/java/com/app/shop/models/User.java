@@ -12,13 +12,13 @@ import java.util.Date;
 @Data
 @Table(name = "users")
 @Entity
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "fulname", length = 100)
     private String fullName;
-    @Column(name = "phone_number",length = 10, nullable = false)
+    @Column(name = "phone_number", length = 10, nullable = false)
     private String phoneNumber;
     @Column(name = "address", length = 200, nullable = false)
     private String address;
@@ -32,6 +32,6 @@ public class User extends BaseEntity{
     @Column(name = "google_account_id")
     private int googleAccountId;
     @ManyToOne
-    @Column(name = "role_id")
+    @JoinColumn(name = "role_id")
     private Role roleId;
 }

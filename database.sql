@@ -17,7 +17,7 @@ create table roles(
 	id int primary key,
 	name varchar(20) not null
 );
-
+select * from users;
 alter table users add column role_id int;
 alter table users add foreign key (role_id) references roles(id);
 
@@ -50,6 +50,7 @@ create table categories(
 	id serial4 primary key,
 	"name" varchar(100) not null default ''
 );
+
 
 -- Bảng chứa sản phẩm: Ipad air 2020, Ipad pro 2020
 

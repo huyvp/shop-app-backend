@@ -10,6 +10,7 @@ public class DTOConstants {
         String MIN_MSG = "Price must be greater than or equal to 0";
         String MAX_MSG = "Price must be less than or equal to 10.000.000";
     }
+
     public interface Category {
         String EMPTY_MSG = "Category' name can not be empty";
     }

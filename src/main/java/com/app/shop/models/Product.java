@@ -22,7 +22,9 @@ public class Product extends BaseEntity {
     private String thumbnail;
     @Column(name = "description")
     private String description;
-    @ManyToOne
-    @Column(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    // FetchType.LAZY: Thuộc tính category của product chỉ truy vấn CSDL khi cần chứ không vào lúc product lấy ra từ CSDL
+//    @Column(name = "category_id")
+    @JoinColumn(name = "category_id")
     private Category categoryId;
 }

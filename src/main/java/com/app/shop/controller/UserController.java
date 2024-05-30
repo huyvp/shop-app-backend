@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("${api.prefix}/users")
 public class UserController {
     @PostMapping("/register")
-    public String createUser(@Valid @RequestBody UserDTO userDTO){
+    public String createUser(@Valid @RequestBody UserDTO userDTO) {
         return "Create user";
     }
+
     @PostMapping("/login")
-    public String login(@Valid @RequestBody UserLoginDTO userDTO){
+    public String login(@Valid @RequestBody UserLoginDTO userDTO) {
         return "User login token";
     }
 }

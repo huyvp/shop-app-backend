@@ -58,6 +58,7 @@ public class ProductController {
         String timestamp = dateFormat.format(new Date());
         return sb.append(timestamp).append(".png").toString();
     }
+
     @GetMapping
     public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         return "Get all product";
@@ -67,6 +68,7 @@ public class ProductController {
     public String getProductById(@PathVariable int id) {
         return "Product by id";
     }
+
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable int id) {
         return "Delete Product";

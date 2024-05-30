@@ -13,21 +13,21 @@ import java.util.Date;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleAllException(Exception ex, HttpServletRequest request){
-          return ErrorResponse.builder()
-                  .timestamp(new Date())
-                  .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                  .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                  .message(ex.getMessage())
-                  .path(request.getRequestURI())
-                  .build();
+    public ErrorResponse handleAllException(Exception ex, HttpServletRequest request) {
+        return ErrorResponse.builder()
+                .timestamp(new Date())
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBindException(BindException ex, HttpServletRequest request){
+    public ErrorResponse handleBindException(BindException ex, HttpServletRequest request) {
         String msg = "";
-        if (ex.getBindingResult().hasErrors()){
+        if (ex.getBindingResult().hasErrors()) {
             msg = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         }
         return ErrorResponse.builder()
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FileSizeException.class)
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
-    public ErrorResponse handleFileSizeException(FileSizeException ex, HttpServletRequest request){
+    public ErrorResponse handleFileSizeException(FileSizeException ex, HttpServletRequest request) {
         return ErrorResponse.builder()
                 .timestamp(new Date())
                 .code(HttpStatus.PAYLOAD_TOO_LARGE.value())
@@ -50,9 +50,10 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
     }
+
     @ExceptionHandler(FileFormatNotSupportException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    public ErrorResponse handleFileFormatNotSupportException(FileFormatNotSupportException ex, HttpServletRequest request){
+    public ErrorResponse handleFileFormatNotSupportException(FileFormatNotSupportException ex, HttpServletRequest request) {
         return ErrorResponse.builder()
                 .timestamp(new Date())
                 .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())

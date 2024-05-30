@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
-import static com.app.shop.constant.Constants.Pattern.*;
+import static com.app.shop.constant.Constants.Pattern.TIME;
 
 @AllArgsConstructor
 @NoArgsConstructor
