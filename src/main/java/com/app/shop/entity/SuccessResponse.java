@@ -1,4 +1,4 @@
-package com.app.shop.exception;
+package com.app.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -13,13 +13,13 @@ import static com.app.shop.constant.Constants.Pattern.TIME;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class ErrorResponse {
+@Data
+public class SuccessResponse {
     @JsonFormat(pattern = TIME, timezone = "Asia/Bangkok")
     private Date timestamp;
     private int code;
     private HttpStatus status;
     private String message;
-    private String path;
+    private Object data;
 }
