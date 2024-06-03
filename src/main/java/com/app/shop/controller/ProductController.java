@@ -25,40 +25,8 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 public class ProductController {
     @PostMapping("")
     public String createProduct(@Valid @ModelAttribute ProductDTO productDTO) throws IOException {
-        List<MultipartFile> files = productDTO.getFiles();
-        files = files == null ? new ArrayList<>(0) : files;
-        for (MultipartFile file : files) {
-            if (file.getSize() == 0) continue;
-            if (file.getSize() > 10 * 1048576) {
-                throw new FileSizeException("File is too large! Maximum size is 10MB");
-            }
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                throw new FileFormatNotSupportException("File must be an image");
-            }
-            storeFile(file);
-        }
         return "DONE";
     }
-
-    private void storeFile(MultipartFile file) throws IOException {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename() != null ? file.getOriginalFilename() : "");
-        String uniqueFileName = generateUniqueName(filename);
-        Path uploadDir = Paths.get("uploads");
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectories(uploadDir);
-        }
-        Path destination = Paths.get(uploadDir.toString(), uniqueFileName);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-    }
-
-    private String generateUniqueName(String nameDefault) {
-        StringBuilder sb = new StringBuilder();
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
-        String timestamp = dateFormat.format(new Date());
-        return sb.append(timestamp).append(".png").toString();
-    }
-
     @GetMapping
     public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         return "Get all product";

@@ -1,17 +1,25 @@
-package com.app.shop.service;
+package com.app.shop.service.impl;
 
 import com.app.shop.dto.CategoryDTO;
 import com.app.shop.models.Category;
 import com.app.shop.repo.CategoryRepository;
-import lombok.RequiredArgsConstructor;
+import com.app.shop.service.ICategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@Transactional
 public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepository;
+
+    @Autowired
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
     @Override
     public Category createCategory(CategoryDTO categoryDTO) {
         Category category = Category.builder()
@@ -31,11 +39,10 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Category updateCategory(long id, CategoryDTO categoryDTO) {
+    public void updateCategory(long id, CategoryDTO categoryDTO) {
         Category existingCategory = getCategoryById(id);
         existingCategory.setName(categoryDTO.getName());
         categoryRepository.save(existingCategory);
-        return existingCategory;
     }
 
     @Override

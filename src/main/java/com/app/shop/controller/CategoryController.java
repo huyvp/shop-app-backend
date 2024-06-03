@@ -2,7 +2,8 @@ package com.app.shop.controller;
 
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.dto.CategoryDTO;
-import com.app.shop.service.CategoryService;
+import com.app.shop.service.ICategoryService;
+import com.app.shop.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
-    private CategoryService categoryService;
+    private ICategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(ICategoryService categoryService) {
         this.categoryService = categoryService;
     }
 

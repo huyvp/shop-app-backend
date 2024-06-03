@@ -1,6 +1,7 @@
 package com.app.shop.handler;
 
 import com.app.shop.entity.ErrorResponse;
+import com.app.shop.exception.DataNotFoundException;
 import com.app.shop.exception.FileFormatNotSupportException;
 import com.app.shop.exception.FileSizeException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,6 +62,17 @@ public class GlobalExceptionHandler {
                 .timestamp(new Date())
                 .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
                 .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+    }
+    @ExceptionHandler(DataNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleDataNotFoundException(DataNotFoundException ex, HttpServletRequest request){
+        return ErrorResponse.builder()
+                .timestamp(new Date())
+                .code(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.NOT_FOUND)
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
