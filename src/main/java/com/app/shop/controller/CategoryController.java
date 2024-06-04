@@ -1,9 +1,8 @@
 package com.app.shop.controller;
 
-import com.app.shop.handler.ResponseHandler;
 import com.app.shop.dto.CategoryDTO;
+import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.ICategoryService;
-import com.app.shop.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

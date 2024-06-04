@@ -2,7 +2,6 @@ package com.app.shop.service;
 
 import com.app.shop.dto.CategoryDTO;
 import com.app.shop.models.Category;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

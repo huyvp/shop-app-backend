@@ -1,44 +1,88 @@
 package com.app.shop.controller;
 
 import com.app.shop.dto.ProductDTO;
-import com.app.shop.exception.FileFormatNotSupportException;
-import com.app.shop.exception.FileSizeException;
+import com.app.shop.exception.ShopException;
+import com.app.shop.handler.ResponseHandler;
+import com.app.shop.models.Product;
+import com.app.shop.response.ProductResponse;
+import com.app.shop.service.IProductService;
+import com.github.javafaker.Faker;
 import jakarta.validation.Valid;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static com.app.shop.constant.Constants.Pattern.DATE;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
-    @PostMapping("")
-    public String createProduct(@Valid @ModelAttribute ProductDTO productDTO) throws IOException {
-        return "DONE";
+    private final IProductService productService;
+
+    @Autowired
+    public ProductController(IProductService productService) {
+        this.productService = productService;
     }
+
+    @PostMapping("")
+    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDTO productDTO) throws IOException {
+        return ResponseHandler.returnObject(HttpStatus.CREATED, productService.createProduct(productDTO));
+    }
+
+    @PostMapping(value = "/uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
+        return ResponseHandler.returnObject(HttpStatus.CREATED, productService.uploadImage(id, files));
+    }
+
     @GetMapping
-    public String getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        return "Get all product";
+    public ResponseEntity<Object> getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        Page<ProductResponse> productPage = productService.getAllProducts(
+                PageRequest.of(page, limit, Sort.by("CreatedAt").descending())
+        );
+        int totalPages = productPage.getSize();
+        List<ProductResponse> products = productPage.getContent();
+        return ResponseHandler.returnList(HttpStatus.OK, products, totalPages);
     }
 
     @GetMapping("/{id}")
-    public String getProductById(@PathVariable int id) {
-        return "Product by id";
+    public ResponseEntity<?> getProductById(@PathVariable int id) {
+        Product product = productService.getProductById(id);
+        return ResponseHandler.returnObject(HttpStatus.OK, product);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProduct(@PathVariable int id) {
-        return "Delete Product";
+    public ResponseEntity<?> deleteProduct(@PathVariable int id) {
+        try {
+            Product product = productService.getProductById(id);
+            productService.deleteProduct(id);
+            return ResponseHandler.returnBase(HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ShopException("Can't remove this product", ex);
+        }
+    }
+
+    @PostMapping("/faker")
+    public String genProducts() throws IOException {
+        Faker faker = new Faker();
+        for (int i = 0; i < 100; i++) {
+            String name = faker.commerce().productName();
+            if (productService.existsByName(name)) continue;
+            ProductDTO productDTO = ProductDTO.builder()
+                    .name(name)
+                    .price(faker.number().numberBetween(10, 90_000_000))
+                    .description(faker.lorem().sentence())
+                    .thumbnail("")
+                    .categoryId(faker.number().numberBetween(2, 5))
+                    .build();
+            productService.createProduct(productDTO);
+        }
+        return "DONE";
     }
 }

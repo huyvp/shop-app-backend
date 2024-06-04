@@ -58,7 +58,7 @@ create table products(
 	id serial4 primary key,
 	"name" varchar(350),
 	price float not null check(price >= 0),
-	thumnail varchar(300) default '',
+	thumbnail varchar(300) default '',
 	description text default '',
 	created_at timestamp,
 	updated_at timestamp,

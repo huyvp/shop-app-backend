@@ -2,20 +2,20 @@ package com.app.shop.service.impl;
 
 import com.app.shop.dto.ProductDTO;
 import com.app.shop.exception.DataNotFoundException;
-import com.app.shop.exception.FileFormatNotSupportException;
 import com.app.shop.exception.FileSizeException;
 import com.app.shop.models.Category;
 import com.app.shop.models.Product;
 import com.app.shop.models.ProductImage;
 import com.app.shop.repo.CategoryRepository;
+import com.app.shop.repo.ProductImageRepository;
 import com.app.shop.repo.ProductRepository;
+import com.app.shop.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.app.shop.constant.Constants.Common.MAXIMUM_IMAGES_PER_PRODUCT;
 import static com.app.shop.constant.Constants.Pattern.DATE;
 
 @Service
@@ -36,47 +37,49 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductImageRepository productImageRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.productImageRepository = productImageRepository;
     }
 
     @Override
     public Product createProduct(ProductDTO productDTO) throws IOException {
-        Category category = categoryRepository.findById(productDTO.getCategoryId())
-                .orElseThrow(() -> new DataNotFoundException("Cannot find category of product"));
-        Product product = Product.builder()
-                .name(productDTO.getName())
-                .price(productDTO.getPrice())
-                .thumbnail(productDTO.getThumbnail())
-                .categoryId(category)
-                .build();
-        List<MultipartFile> files = productDTO.getFiles();
-        files = files == null ? new ArrayList<>(0) : files;
-        for (MultipartFile file : files) {
-            if (file.getSize() == 0) continue;
-            if (file.getSize() > 10 * 1048576) {
-                throw new FileSizeException("File is too large! Maximum size is 10MB");
-            }
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                throw new FileFormatNotSupportException("File must be an image");
-            }
-            String fileName = storeFile(file);
-        }
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new DataNotFoundException("Cannot find category of product"));
+        Product product = Product.builder().name(productDTO.getName()).price(productDTO.getPrice()).description(productDTO.getDescription()).thumbnail(productDTO.getThumbnail()).category(category).build();
         return productRepository.save(product);
     }
 
     @Override
-    public Product getProductById(long id) {
-        return productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Can not found product with this id"));
+    public List<ProductImage> uploadImage(Long id, List<MultipartFile> files) throws IOException {
+        List<ProductImage> productImages = new ArrayList<>();
+        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product of this image not found"));
+        if (files == null) throw new RuntimeException("Files is null");
+        for (MultipartFile file : files) {
+            if (files.size() > MAXIMUM_IMAGES_PER_PRODUCT)
+                throw new RuntimeException("Too many images, maximum image price is five");
+            if (file.getSize() > 10 * 1048576) {
+                throw new FileSizeException("File is too large! Maximum size is 10MB");
+            }
+            String fileName = storeFile(file);
+            ProductImage productImage = createProductImage(product, fileName);
+            productImages.add(productImage);
+        }
+        return productImages;
     }
 
     @Override
-    public Page<Product> getAllProducts(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest);
+    public Product getProductById(long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Can not found product with this id"));
+    }
+
+    @Override
+    public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
+        return productRepository.findAll(pageRequest).map(ProductResponse::export);
     }
 
     @Override
@@ -88,7 +91,7 @@ public class ProductService implements IProductService {
             product.setThumbnail(productDTO.getThumbnail());
             product.setDescription(productDTO.getDescription());
             Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new DataNotFoundException("Cannot find category of product"));
-            product.setCategoryId(category);
+            product.setCategory(category);
             return productRepository.save(product);
         }
         return null;
@@ -104,12 +107,22 @@ public class ProductService implements IProductService {
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
     }
-    public ProductImage createProductImage(ProductDTO productDTO) {
-        return  null;
+
+    public ProductImage createProductImage(Product product, String url) {
+        ProductImage productImage = ProductImage.builder().product(product).imageUrl(url).build();
+        int imageSize = productImageRepository.findByProductId(product.getId()).size();
+        if (imageSize >= MAXIMUM_IMAGES_PER_PRODUCT) {
+            throw new RuntimeException("Too many images, maximum image price is five");
+        } else {
+            return productImageRepository.save(productImage);
+        }
     }
+
     private String storeFile(MultipartFile file) throws IOException {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename() != null ? file.getOriginalFilename() : "");
-        String uniqueFileName = generateUniqueName(filename);
+        if (!isImageFile(file) || file.getOriginalFilename() == null) {
+            throw new IOException("Invalid image format");
+        }
+        String uniqueFileName = generateUniqueName();
         Path uploadDir = Paths.get("uploads");
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
@@ -119,7 +132,12 @@ public class ProductService implements IProductService {
         return uniqueFileName;
     }
 
-    private String generateUniqueName(String nameDefault) {
+    private boolean isImageFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && contentType.startsWith("image/");
+    }
+
+    private String generateUniqueName() {
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
         String timestamp = dateFormat.format(new Date());

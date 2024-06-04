@@ -1,29 +1,40 @@
 package com.app.shop.handler;
 
-import com.app.shop.entity.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ResponseHandler {
     public static ResponseEntity<Object> returnObject(HttpStatus httpStatus, Object body) {
-        SuccessResponse successResponse = SuccessResponse.builder()
-                .timestamp(new Date())
-                .code(httpStatus.value())
-                .status(httpStatus)
-                .message("Success")
-                .data(body)
-                .build();
-        return new ResponseEntity<>(successResponse, httpStatus);
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("message", "SUCCESS");
+        data.put("code", httpStatus.value());
+        data.put("data", body);
+        return new ResponseEntity<>(data, httpStatus);
     }
+
     public static ResponseEntity<Object> returnMsg(HttpStatus httpStatus, String msg) {
-        SuccessResponse successResponse = SuccessResponse.builder()
-                .timestamp(new Date())
-                .code(httpStatus.value())
-                .status(httpStatus)
-                .message(msg)
-                .build();
-        return new ResponseEntity<>(successResponse, httpStatus);
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("message", "SUCCESS");
+        data.put("code", httpStatus.value());
+        data.put("result", msg);
+        return new ResponseEntity<>(data, httpStatus);
+    }
+
+    public static ResponseEntity<Object> returnList(HttpStatus httpStatus, Object body, int total) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("message", "SUCCESS");
+        data.put("code", httpStatus.value());
+        data.put("total", total);
+        data.put("data", body);
+        return new ResponseEntity<>(data, httpStatus);
+    }
+    public static ResponseEntity<Object> returnBase(HttpStatus httpStatus) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("message", "SUCCESS");
+        data.put("code", httpStatus.value());
+        return new ResponseEntity<>(data, httpStatus);
     }
 }
