@@ -2,7 +2,8 @@ package com.app.shop.service.impl;
 
 import com.app.shop.dto.ProductDTO;
 import com.app.shop.exception.DataNotFoundException;
-import com.app.shop.exception.FileSizeException;
+import com.app.shop.exception.ErrorCode;
+import com.app.shop.exception.ShopAppException;
 import com.app.shop.models.Category;
 import com.app.shop.models.Product;
 import com.app.shop.models.ProductImage;
@@ -48,7 +49,8 @@ public class ProductService implements IProductService {
 
     @Override
     public Product createProduct(ProductDTO productDTO) throws IOException {
-        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new DataNotFoundException("Cannot find category of product"));
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
         Product product = Product.builder().name(productDTO.getName()).price(productDTO.getPrice()).description(productDTO.getDescription()).thumbnail(productDTO.getThumbnail()).category(category).build();
         return productRepository.save(product);
     }
@@ -56,13 +58,14 @@ public class ProductService implements IProductService {
     @Override
     public List<ProductImage> uploadImage(Long id, List<MultipartFile> files) throws IOException {
         List<ProductImage> productImages = new ArrayList<>();
-        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product of this image not found"));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
         if (files == null) throw new RuntimeException("Files is null");
         for (MultipartFile file : files) {
             if (files.size() > MAXIMUM_IMAGES_PER_PRODUCT)
-                throw new RuntimeException("Too many images, maximum image price is five");
+                throw new ShopAppException(ErrorCode.FILE_NUMBER_LIMIT);
             if (file.getSize() > 10 * 1048576) {
-                throw new FileSizeException("File is too large! Maximum size is 10MB");
+                throw new ShopAppException(ErrorCode.FILE_PAYLOAD_TOO_LARGE);
             }
             String fileName = storeFile(file);
             ProductImage productImage = createProductImage(product, fileName);
@@ -74,7 +77,7 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Can not found product with this id"));
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
     }
 
     @Override
@@ -90,7 +93,8 @@ public class ProductService implements IProductService {
             product.setPrice(productDTO.getPrice());
             product.setThumbnail(productDTO.getThumbnail());
             product.setDescription(productDTO.getDescription());
-            Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new DataNotFoundException("Cannot find category of product"));
+            Category category = categoryRepository.findById(productDTO.getCategoryId())
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
             product.setCategory(category);
             return productRepository.save(product);
         }
@@ -112,7 +116,7 @@ public class ProductService implements IProductService {
         ProductImage productImage = ProductImage.builder().product(product).imageUrl(url).build();
         int imageSize = productImageRepository.findByProductId(product.getId()).size();
         if (imageSize >= MAXIMUM_IMAGES_PER_PRODUCT) {
-            throw new RuntimeException("Too many images, maximum image price is five");
+            throw new ShopAppException(ErrorCode.FILE_NUMBER_LIMIT);
         } else {
             return productImageRepository.save(productImage);
         }

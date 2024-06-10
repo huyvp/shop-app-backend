@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
-    private ICategoryService categoryService;
+    private final ICategoryService categoryService;
 
     @Autowired
     public CategoryController(ICategoryService categoryService) {

@@ -14,25 +14,25 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderDTO {
     @JsonProperty("user_id")
-    @Min(value = 1, message = "User's id must be equal greater than zero")
+    @Min(value = 1, message = "INVALID_ID")
     private Long userId;
     @JsonProperty("fullname")
     private String fullName;
     private String email;
     @JsonProperty("phone_number")
-    @NotBlank(message = "Phone number is required")
+    @NotBlank(message = "INVALID_PHONE_NUMBER")
     private String phoneNumber;
     private String address;
     private String note;
     @JsonProperty("total_money")
     private float totalMoney;
     @JsonProperty("shipping_method")
-    @NotBlank(message = "Shipping method is required")
+    @NotBlank(message = "INVALID_ORDER_SHIP_METHOD")
     private String shippingMethod;
     @JsonProperty("shipping_address")
-    @NotBlank(message = "Shipping address is required")
+    @NotBlank(message = "INVALID_ORDER_SHIP_ADDRESS")
     private String shippingAddress;
     @JsonProperty("payment_method")
-    @NotBlank(message = "Payment method is required")
+    @NotBlank(message = "INVALID_ORDER_PAYMENT_METHOD")
     private String paymentMethod;
 }

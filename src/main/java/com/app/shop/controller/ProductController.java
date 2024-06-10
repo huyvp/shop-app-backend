@@ -1,7 +1,6 @@
 package com.app.shop.controller;
 
 import com.app.shop.dto.ProductDTO;
-import com.app.shop.exception.ShopException;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.models.Product;
 import com.app.shop.response.ProductResponse;
@@ -64,7 +63,7 @@ public class ProductController {
             productService.deleteProduct(id);
             return ResponseHandler.returnBase(HttpStatus.OK);
         } catch (Exception ex) {
-            throw new ShopException("Can't remove this product", ex);
+            throw new RuntimeException("Can't remove this product");
         }
     }
 

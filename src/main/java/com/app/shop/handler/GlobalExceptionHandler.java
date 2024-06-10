@@ -1,87 +1,68 @@
 package com.app.shop.handler;
 
 import com.app.shop.exception.DataNotFoundException;
-import com.app.shop.exception.FileFormatNotSupportException;
-import com.app.shop.exception.FileSizeException;
-import com.app.shop.exception.ShopException;
-import com.app.shop.response.ErrorResponse;
+import com.app.shop.exception.ErrorCode;
+import com.app.shop.exception.ShopAppException;
+import com.app.shop.response.AppResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleAllException(Exception ex) {
-        return ErrorResponse.builder()
-                .timestamp(new Date())
-                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .message(ex.getMessage())
+    ResponseEntity<AppResponse<?>> handleRestException(Exception ex) {
+        AppResponse<?> appResponse = AppResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .code(ErrorCode.UNCATEGORIZED.getCode())
+                .status(HttpStatus.BAD_REQUEST)
+                .message(ErrorCode.UNCATEGORIZED.getMessage())
                 .build();
+        return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ShopException.class})
+    @ExceptionHandler(value = ShopAppException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleShopException(ShopException ex) {
-        return ErrorResponse.builder()
-                .timestamp(new Date())
-                .code(HttpStatus.BAD_REQUEST.value())
+    ResponseEntity<AppResponse<?>> handleShopException(ShopAppException ex) {
+        AppResponse<?> appResponse = AppResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .code(ex.getErrorCode().getCode())
                 .status(HttpStatus.BAD_REQUEST)
                 .message(ex.getMessage())
                 .build();
+        return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({BindException.class})
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBindException(BindException ex) {
-        String msg = "";
-        if (ex.getBindingResult().hasErrors()) {
-            msg = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        }
-        return ErrorResponse.builder()
-                .timestamp(new Date())
-                .code(HttpStatus.BAD_REQUEST.value())
+    ResponseEntity<AppResponse<?>> handleValidationException(MethodArgumentNotValidException ex) {
+        String enumKey = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        ErrorCode errorCode = ErrorCode.valueOf(enumKey);
+        AppResponse<?> appResponse = AppResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .code(errorCode.getCode())
                 .status(HttpStatus.BAD_REQUEST)
-                .message(msg)
+                .message(errorCode.getMessage())
                 .build();
-    }
-
-    @ExceptionHandler(FileSizeException.class)
-    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
-    public ErrorResponse handleFileSizeException(FileSizeException ex) {
-        return ErrorResponse.builder()
-                .timestamp(new Date())
-                .code(HttpStatus.PAYLOAD_TOO_LARGE.value())
-                .status(HttpStatus.PAYLOAD_TOO_LARGE)
-                .message(ex.getMessage())
-                .build();
-    }
-
-    @ExceptionHandler(FileFormatNotSupportException.class)
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    public ErrorResponse handleFileFormatNotSupportException(FileFormatNotSupportException ex) {
-        return ErrorResponse.builder()
-                .timestamp(new Date())
-                .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
-                .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                .message(ex.getMessage())
-                .build();
+        return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleDataNotFoundException(DataNotFoundException ex) {
-        return ErrorResponse.builder()
-                .timestamp(new Date())
-                .code(HttpStatus.NOT_FOUND.value())
+    ResponseEntity<AppResponse<?>> handleDataNotFoundException(DataNotFoundException ex) {
+        AppResponse<?> appResponse = AppResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .code(ex.getErrorCode().getCode())
                 .status(HttpStatus.NOT_FOUND)
                 .message(ex.getMessage())
                 .build();
+        return new ResponseEntity<>(appResponse, HttpStatus.NOT_FOUND);
+
     }
 }
