@@ -14,14 +14,14 @@ import java.util.Date;
 @Data
 @Builder
 public class UserDTO {
-    @NotBlank(message = "INVALID_NAME")
+    @NotBlank(message = "VALID_1001")
     @JsonProperty("fullname")
     private String fullName;
-    @NotBlank(message = "INVALID_PHONE_NUMBER")
+    @NotBlank(message = "VALID_1002")
     @JsonProperty("phone_number")
     private String phoneNumber;
     private String address;
-    @NotBlank(message = "INVALID_PASSWORD")
+    @NotBlank(message = "VALID_1003")
     private String password;
     @JsonProperty("date_of_birth")
     private Date dateOfBirth;

@@ -29,7 +29,7 @@ public class UserService implements IUserService {
     public User createUser(UserDTO userDTO) {
         String phoneNumber = userDTO.getPhoneNumber();
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new ShopAppException(ErrorCode.USER_EXISTED);
+            throw new ShopAppException(ErrorCode.USER_3001);
         }
         User user = User.builder()
                 .fullName(userDTO.getFullName())
@@ -41,7 +41,7 @@ public class UserService implements IUserService {
                 .googleAccountId(userDTO.getGoogleAccountId())
                 .build();
         Role role = roleRepository.findById(userDTO.getRoleId())
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_3002));
         user.setRoleId(role);
         if (userDTO.getFacebookAccountId() == 0 || userDTO.getGoogleAccountId() == 0) {
             String password = userDTO.getPassword();

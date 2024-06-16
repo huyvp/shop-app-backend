@@ -16,10 +16,10 @@ import static com.app.shop.constant.DTOConstants.Product.*;
 @Data
 @Builder
 public class ProductDTO {
-    @Size(min = MIN_SIZE, max = MAX_SIZE, message = "INVALID_PRODUCT_NAME")
+    @Size(min = MIN_SIZE, max = MAX_SIZE, message = "VALID_1006")
     private String name;
-    @Min(value = MIN_VALUE, message = "INVALID_PRODUCT_PRICE")
-    @Max(value = MAX_VALUE, message = "INVALID_PRODUCT_PRICE")
+    @Min(value = MIN_VALUE, message = "VALID_1007")
+    @Max(value = MAX_VALUE, message = "VALID_1007")
     private float price;
     private String thumbnail;
     private String description;

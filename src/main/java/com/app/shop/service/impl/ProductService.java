@@ -59,13 +59,13 @@ public class ProductService implements IProductService {
     public List<ProductImage> uploadImage(Long id, List<MultipartFile> files) throws IOException {
         List<ProductImage> productImages = new ArrayList<>();
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.PRODUCT_3002));
         if (files == null) throw new RuntimeException("Files is null");
         for (MultipartFile file : files) {
             if (files.size() > MAXIMUM_IMAGES_PER_PRODUCT)
-                throw new ShopAppException(ErrorCode.FILE_NUMBER_LIMIT);
+                throw new ShopAppException(ErrorCode.FILE_2003);
             if (file.getSize() > 10 * 1048576) {
-                throw new ShopAppException(ErrorCode.FILE_PAYLOAD_TOO_LARGE);
+                throw new ShopAppException(ErrorCode.FILE_2002);
             }
             String fileName = storeFile(file);
             ProductImage productImage = createProductImage(product, fileName);
@@ -77,7 +77,7 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.PRODUCT_3002));
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ProductService implements IProductService {
             product.setThumbnail(productDTO.getThumbnail());
             product.setDescription(productDTO.getDescription());
             Category category = categoryRepository.findById(productDTO.getCategoryId())
-                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.CATEGORY_3002));
             product.setCategory(category);
             return productRepository.save(product);
         }
@@ -116,7 +116,7 @@ public class ProductService implements IProductService {
         ProductImage productImage = ProductImage.builder().product(product).imageUrl(url).build();
         int imageSize = productImageRepository.findByProductId(product.getId()).size();
         if (imageSize >= MAXIMUM_IMAGES_PER_PRODUCT) {
-            throw new ShopAppException(ErrorCode.FILE_NUMBER_LIMIT);
+            throw new ShopAppException(ErrorCode.FILE_2003);
         } else {
             return productImageRepository.save(productImage);
         }

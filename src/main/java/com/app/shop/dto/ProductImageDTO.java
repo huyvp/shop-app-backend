@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductImageDTO {
     @JsonProperty(value = "product_id")
-    @Min(value = 1, message = "INVALID_ID")
+    @Min(value = 1, message = "VALID_1000")
     private int productId;
     @JsonProperty(value = "image_id")
-    @Size(min = 5, max = 200, message = "INVALID_PRODUCT_IMAGE_URL")
+    @Size(min = 5, max = 200, message = "VALID_1004")
     private String imageUrl;
 }

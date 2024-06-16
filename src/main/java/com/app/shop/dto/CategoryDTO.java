@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CategoryDTO {
-    @NotEmpty(message = "INVALID_CATEGORY_NAME")
+    @NotEmpty(message = "VALID_1005")
     private String name;
 }
