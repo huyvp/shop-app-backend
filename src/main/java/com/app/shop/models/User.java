@@ -18,7 +18,7 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "fulname", length = 100)
+    @Column(name = "fullname", length = 100)
     private String fullName;
     @Column(name = "phone_number", length = 10, nullable = false)
     private String phoneNumber;
@@ -26,6 +26,7 @@ public class User extends BaseEntity {
     private String address;
     @Column(name = "password", length = 200, nullable = false)
     private String password;
+    @Column(name = "is_active")
     private boolean active;
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
@@ -35,5 +36,5 @@ public class User extends BaseEntity {
     private int googleAccountId;
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private Role roleId;
+    private Role role;
 }

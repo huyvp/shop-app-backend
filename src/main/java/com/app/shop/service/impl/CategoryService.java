@@ -1,6 +1,8 @@
 package com.app.shop.service.impl;
 
 import com.app.shop.dto.CategoryDTO;
+import com.app.shop.exception.ErrorCode;
+import com.app.shop.exception.ShopAppException;
 import com.app.shop.models.Category;
 import com.app.shop.repo.CategoryRepository;
 import com.app.shop.service.ICategoryService;
@@ -30,7 +32,8 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category getCategoryById(long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
     }
 
     @Override

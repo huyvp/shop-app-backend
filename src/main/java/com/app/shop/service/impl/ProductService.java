@@ -1,7 +1,6 @@
 package com.app.shop.service.impl;
 
 import com.app.shop.dto.ProductDTO;
-import com.app.shop.exception.DataNotFoundException;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.models.Category;
@@ -12,7 +11,9 @@ import com.app.shop.repo.ProductImageRepository;
 import com.app.shop.repo.ProductRepository;
 import com.app.shop.response.ProductResponse;
 import com.app.shop.service.IProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -35,22 +36,17 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductService implements IProductService {
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-    private final ProductImageRepository productImageRepository;
-
-    @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductImageRepository productImageRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-        this.productImageRepository = productImageRepository;
-    }
+    ProductRepository productRepository;
+    CategoryRepository categoryRepository;
+    ProductImageRepository productImageRepository;
 
     @Override
     public Product createProduct(ProductDTO productDTO) throws IOException {
         Category category = categoryRepository.findById(productDTO.getCategoryId())
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.DATA_NOT_FOUND));
+                .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         Product product = Product.builder().name(productDTO.getName()).price(productDTO.getPrice()).description(productDTO.getDescription()).thumbnail(productDTO.getThumbnail()).category(category).build();
         return productRepository.save(product);
     }
@@ -59,7 +55,7 @@ public class ProductService implements IProductService {
     public List<ProductImage> uploadImage(Long id, List<MultipartFile> files) throws IOException {
         List<ProductImage> productImages = new ArrayList<>();
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.PRODUCT_3002));
+                .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
         if (files == null) throw new RuntimeException("Files is null");
         for (MultipartFile file : files) {
             if (files.size() > MAXIMUM_IMAGES_PER_PRODUCT)
@@ -77,7 +73,7 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.PRODUCT_3002));
+                .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
     }
 
     @Override
@@ -94,7 +90,7 @@ public class ProductService implements IProductService {
             product.setThumbnail(productDTO.getThumbnail());
             product.setDescription(productDTO.getDescription());
             Category category = categoryRepository.findById(productDTO.getCategoryId())
-                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.CATEGORY_3002));
+                    .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
             product.setCategory(category);
             return productRepository.save(product);
         }

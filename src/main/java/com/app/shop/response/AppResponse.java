@@ -23,5 +23,6 @@ public class AppResponse<T> {
     private int code;
     private HttpStatus status;
     private String message;
+    private Integer totals;
     private T result;
 }

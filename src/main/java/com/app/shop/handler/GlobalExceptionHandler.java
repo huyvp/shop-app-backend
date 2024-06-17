@@ -1,6 +1,5 @@
 package com.app.shop.handler;
 
-import com.app.shop.exception.DataNotFoundException;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.response.AppResponse;
@@ -22,7 +21,7 @@ public class GlobalExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .code(ErrorCode.UNCATEGORIZED.getCode())
                 .status(HttpStatus.BAD_REQUEST)
-                .message(ErrorCode.UNCATEGORIZED.getMessage())
+                .message(ex.getMessage())
                 .build();
         return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
     }
@@ -51,18 +50,5 @@ public class GlobalExceptionHandler {
                 .message(errorCode.getMessage())
                 .build();
         return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DataNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResponseEntity<AppResponse<?>> handleDataNotFoundException(DataNotFoundException ex) {
-        AppResponse<?> appResponse = AppResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .code(ex.getErrorCode().getCode())
-                .status(HttpStatus.NOT_FOUND)
-                .message(ex.getMessage())
-                .build();
-        return new ResponseEntity<>(appResponse, HttpStatus.NOT_FOUND);
-
     }
 }

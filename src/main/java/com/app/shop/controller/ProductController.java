@@ -7,11 +7,13 @@ import com.app.shop.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import com.github.javafaker.Faker;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,38 +24,35 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductController {
-    private final IProductService productService;
-
-    @Autowired
-    public ProductController(IProductService productService) {
-        this.productService = productService;
-    }
+    IProductService productService;
 
     @PostMapping("")
-    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDTO productDTO) throws IOException {
-        return ResponseHandler.returnObject(HttpStatus.CREATED, productService.createProduct(productDTO));
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO) throws IOException {
+        return ResponseHandler.execute(productService.createProduct(productDTO));
     }
 
     @PostMapping(value = "/uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
-        return ResponseHandler.returnObject(HttpStatus.CREATED, productService.uploadImage(id, files));
+    public ResponseEntity<?> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
+        return ResponseHandler.execute(productService.uploadImage(id, files));
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public ResponseEntity<?> getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         Page<ProductResponse> productPage = productService.getAllProducts(
                 PageRequest.of(page, limit, Sort.by("CreatedAt").descending())
         );
         int totalPages = productPage.getSize();
         List<ProductResponse> products = productPage.getContent();
-        return ResponseHandler.returnList(HttpStatus.OK, products, totalPages);
+        return ResponseHandler.execute(products, totalPages);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable int id) {
         Product product = productService.getProductById(id);
-        return ResponseHandler.returnObject(HttpStatus.OK, product);
+        return ResponseHandler.execute(product);
     }
 
     @DeleteMapping("/{id}")
@@ -61,7 +60,7 @@ public class ProductController {
         try {
             Product product = productService.getProductById(id);
             productService.deleteProduct(id);
-            return ResponseHandler.returnBase(HttpStatus.OK);
+            return ResponseHandler.execute(null);
         } catch (Exception ex) {
             throw new RuntimeException("Can't remove this product");
         }

@@ -5,8 +5,9 @@ import com.app.shop.dto.UserLoginDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,21 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("${api.prefix}/users")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-    private final IUserService userService;
-
-    @Autowired
-    public UserController(IUserService userService) {
-        this.userService = userService;
-    }
+    IUserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDTO userDTO) {
-        return ResponseHandler.returnObject(HttpStatus.CREATED, userService.createUser(userDTO));
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
+        return ResponseHandler.execute(userService.createUser(userDTO));
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody UserLoginDTO userDTO) {
-        return "User login token";
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userDTO) {
+        userService.login(userDTO);
+        return ResponseHandler.execute(null);
     }
 }

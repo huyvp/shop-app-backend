@@ -2,10 +2,15 @@ package com.app.shop.controller;
 
 import com.app.shop.dto.OrderDetailDTO;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.prefix}/order_details")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderDetailController {
     @PostMapping
     public String createOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
