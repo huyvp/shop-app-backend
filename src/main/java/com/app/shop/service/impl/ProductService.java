@@ -3,6 +3,8 @@ package com.app.shop.service.impl;
 import com.app.shop.dto.ProductDTO;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
+import com.app.shop.mapper.ProductMapper;
+import com.app.shop.mapper.UserMapper;
 import com.app.shop.models.Category;
 import com.app.shop.models.Product;
 import com.app.shop.models.ProductImage;
@@ -29,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static com.app.shop.constant.Constants.Common.MAXIMUM_IMAGES_PER_PRODUCT;
 import static com.app.shop.constant.Constants.Pattern.DATE;
@@ -42,13 +43,15 @@ public class ProductService implements IProductService {
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
     ProductImageRepository productImageRepository;
+    ProductMapper productMapper;
+    private final UserMapper userMapper;
 
     @Override
-    public Product createProduct(ProductDTO productDTO) throws IOException {
+    public ProductResponse createProduct(ProductDTO productDTO) throws IOException {
         Category category = categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
-        Product product = Product.builder().name(productDTO.getName()).price(productDTO.getPrice()).description(productDTO.getDescription()).thumbnail(productDTO.getThumbnail()).category(category).build();
-        return productRepository.save(product);
+        Product product = productRepository.save(productMapper.toProduct(productDTO));
+        return productMapper.toProductResponse(product);
     }
 
     @Override
@@ -71,36 +74,34 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(long id) {
-        return productRepository.findById(id)
+    public ProductResponse getProductById(long id) {
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
+        return productMapper.toProductResponse(product);
     }
 
     @Override
     public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest).map(ProductResponse::export);
+        return productRepository.findAll(pageRequest).map(productMapper::toProductResponse);
     }
 
     @Override
     public Product updateProduct(long id, ProductDTO productDTO) {
-        Product product = getProductById(id);
-        if (product != null) {
-            product.setName(productDTO.getName());
-            product.setPrice(productDTO.getPrice());
-            product.setThumbnail(productDTO.getThumbnail());
-            product.setDescription(productDTO.getDescription());
-            Category category = categoryRepository.findById(productDTO.getCategoryId())
-                    .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
-            product.setCategory(category);
-            return productRepository.save(product);
-        }
-        return null;
+        productRepository.findById(id)
+                .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
+        Product newProduct = productMapper.toProduct(productDTO);
+        newProduct.setId(id);
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
+        newProduct.setCategory(category);
+        return productRepository.save(newProduct);
     }
 
     @Override
     public void deleteProduct(long id) {
-        Optional<Product> product = productRepository.findById(id);
-        product.ifPresent(productRepository::delete);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
+        productRepository.delete(product);
     }
 
     @Override

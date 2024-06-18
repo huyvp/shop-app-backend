@@ -15,18 +15,4 @@ public class ProductResponse extends BaseResponse {
     private String thumbnail;
     private String description;
     private long categoryId;
-
-    public static ProductResponse export(Product product) {
-        ProductResponse productResponse = ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .thumbnail(product.getThumbnail())
-                .description(product.getDescription())
-                .categoryId(product.getCategory().getId())
-                .build();
-        productResponse.setCreatedAt(product.getCreatedAt());
-        productResponse.setUpdatedAt(product.getUpdatedAt());
-        return productResponse;
-    }
 }

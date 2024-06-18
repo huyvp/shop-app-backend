@@ -19,3 +19,5 @@ spring:
         format_sql: true
 api:
   prefix: api/v1
+jwt:
+  signerKey: SpringBootTrainingsdfhsdfgsr4gsfgsregsfgsfdg#$%S%G
