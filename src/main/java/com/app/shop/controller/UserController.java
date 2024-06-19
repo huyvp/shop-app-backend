@@ -1,8 +1,10 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.UserDTO;
+import com.app.shop.dto.user.UserDTO;
+import com.app.shop.dto.user.UserUpdateDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,8 +25,8 @@ public class UserController {
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
-        userService.updateUser(id, userDTO);
+    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+        userService.updateUser(id, userUpdateDTO);
         return ResponseHandler.execute(null);
     }
 

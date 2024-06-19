@@ -1,7 +1,7 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.UserDTO;
-import com.app.shop.dto.UserLoginDTO;
+import com.app.shop.dto.user.UserDTO;
+import com.app.shop.dto.user.UserLoginDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
 import jakarta.validation.Valid;
@@ -20,16 +20,22 @@ public class AuthController {
 
     @PostMapping(value = "register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
-        return ResponseHandler.execute(userService.createUser(userDTO));
+        return ResponseHandler.execute(
+                userService.createUser(userDTO)
+        );
     }
 
     @PostMapping(value = "login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userDTO) {
-        return ResponseHandler.execute(userService.login(userDTO));
+        return ResponseHandler.execute(
+                userService.login(userDTO)
+        );
     }
 
     @PostMapping("introspect")
     public ResponseEntity<?> introspect(@RequestParam("token") String token) {
-        return ResponseHandler.execute(userService.checkTokenTest(token));
+        return ResponseHandler.execute(
+                userService.checkTokenTest(token)
+        );
     }
 }

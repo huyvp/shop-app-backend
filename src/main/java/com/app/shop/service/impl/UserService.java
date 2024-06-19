@@ -1,7 +1,8 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.UserDTO;
-import com.app.shop.dto.UserLoginDTO;
+import com.app.shop.dto.user.UserDTO;
+import com.app.shop.dto.user.UserLoginDTO;
+import com.app.shop.dto.user.UserUpdateDTO;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.UserMapper;
@@ -51,7 +52,7 @@ public class UserService implements IUserService {
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
             throw new ShopAppException(ErrorCode.USER_3001);
         }
-        User user = userMapper.toUser(userDTO);
+        User user = userMapper.toUserFromUserDTO(userDTO);
         user.setActive(true);
         Role role = roleRepository.findById(userDTO.getRoleId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ROLE_3002));
@@ -64,12 +65,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updateUser(long id, UserDTO userDTO) {
+    public void updateUser(long id, UserUpdateDTO userUpdateDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
-        User newUser = userMapper.toUser(userDTO);
-        newUser.setId(user.getId());
-        userRepository.save(newUser);
+        userMapper.updateUser(user, userUpdateDTO);
+        userRepository.save(user);
     }
 
     @Override

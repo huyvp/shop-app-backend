@@ -1,6 +1,6 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.ProductDTO;
+import com.app.shop.dto.product.ProductDTO;
 import com.app.shop.models.Product;
 import com.app.shop.models.ProductImage;
 import com.app.shop.response.ProductResponse;

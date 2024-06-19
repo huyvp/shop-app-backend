@@ -1,8 +1,7 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.ProductDTO;
+import com.app.shop.dto.product.ProductDTO;
 import com.app.shop.handler.ResponseHandler;
-import com.app.shop.models.Product;
 import com.app.shop.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import com.github.javafaker.Faker;
@@ -10,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -60,7 +58,9 @@ public class ProductController {
     }
     @PostMapping(value = "/uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
-        return ResponseHandler.execute(productService.uploadImage(id, files));
+        return ResponseHandler.execute(
+                productService.uploadImage(id, files)
+        );
     }
 
     @PostMapping("/faker")

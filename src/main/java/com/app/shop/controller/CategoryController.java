@@ -19,17 +19,23 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createCategories(@RequestBody @Valid CategoryDTO categoryDTO) {
-        return ResponseHandler.execute(categoryService.createCategory(categoryDTO));
+        return ResponseHandler.execute(
+                categoryService.createCategory(categoryDTO)
+        );
     }
 
     @GetMapping
     public ResponseEntity<?> getAllCategories() {
-        return ResponseHandler.execute(categoryService.getALlCategories());
+        return ResponseHandler.execute(
+                categoryService.getALlCategories()
+        );
     }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getCategoriesById(@PathVariable int id) {
-        return ResponseHandler.execute(categoryService.getCategoryById(id));
+        return ResponseHandler.execute(
+                categoryService.getCategoryById(id)
+        );
     }
 
     @PutMapping("{id}")

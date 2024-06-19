@@ -2,6 +2,7 @@ package com.app.shop.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "orders")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
@@ -33,7 +35,7 @@ public class Order {
     @Column(name = "status")
     private String status;
     @Column(name = "total_money")
-    private Integer totalMoney;
+    private Float totalMoney;
     @Column(name = "shipping_method")
     private String shippingMethod;
     @Column(name = "shipping_address")

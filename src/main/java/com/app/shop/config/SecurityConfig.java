@@ -17,7 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final String[] ENDPOINTS = {"api/v1/register", "api/v1/auth/*"};
+    private final String[] ENDPOINTS = {"api/v1/auth/*"};
     @Value("${jwt.signerKey}")
     protected String signingKey;
 
@@ -27,8 +27,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, ENDPOINTS).permitAll()
                 .anyRequest().authenticated()
         );
-        httpSecurity.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
+
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(
+                jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+        ));
+
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }

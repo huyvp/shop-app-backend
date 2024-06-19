@@ -1,6 +1,6 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.ProductDTO;
+import com.app.shop.dto.product.ProductDTO;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.ProductMapper;
@@ -48,7 +48,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductResponse createProduct(ProductDTO productDTO) throws IOException {
-        Category category = categoryRepository.findById(productDTO.getCategoryId())
+        categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         Product product = productRepository.save(productMapper.toProduct(productDTO));
         return productMapper.toProductResponse(product);
