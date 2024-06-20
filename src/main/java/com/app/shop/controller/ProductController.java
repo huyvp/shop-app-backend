@@ -35,7 +35,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProduct(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public ResponseEntity<?> getAllProduct(@RequestParam("page") int page,
+                                           @RequestParam("limit") int limit) {
         Page<ProductResponse> productPage = productService.getAllProducts(
                 PageRequest.of(page, limit, Sort.by("CreatedAt").ascending())
         );
@@ -51,11 +52,18 @@ public class ProductController {
         );
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
+        productService.updateProduct(id, productDTO);
+        return ResponseHandler.execute(null);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id) {
-            productService.deleteProduct(id);
-            return ResponseHandler.execute(null);
+        productService.deleteProduct(id);
+        return ResponseHandler.execute(null);
     }
+
     @PostMapping(value = "/uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
         return ResponseHandler.execute(

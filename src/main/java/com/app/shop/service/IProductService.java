@@ -1,7 +1,6 @@
 package com.app.shop.service;
 
 import com.app.shop.dto.product.ProductDTO;
-import com.app.shop.models.Product;
 import com.app.shop.models.ProductImage;
 import com.app.shop.response.ProductResponse;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,7 @@ public interface IProductService {
 
     Page<ProductResponse> getAllProducts(PageRequest pageRequest);
 
-    Product updateProduct(long id, ProductDTO productDTO);
+    void updateProduct(long id, ProductDTO productDTO);
 
     void deleteProduct(long id);
 

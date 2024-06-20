@@ -1,37 +1,71 @@
 package com.app.shop.controller;
 
 import com.app.shop.dto.OrderDTO;
+import com.app.shop.handler.ResponseHandler;
+import com.app.shop.response.OrderResponse;
+import com.app.shop.service.IOrderService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/orders")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderController {
-    @PostMapping()
-    public String createOrder(@Valid @RequestBody OrderDTO orderDTO) {
-        return "Create order";
-    }
+    IOrderService orderService;
 
-    @GetMapping("/{user_id}")
-    public String getOrders(
-            @Valid @PathVariable("user_id") Long userId,
-            @RequestParam("limit") int limit,
-            @RequestParam("page") int page) {
-        return "Get orders of a user";
+    @PostMapping()
+    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
+        return ResponseHandler.execute(
+                orderService.createOrder(orderDTO)
+        );
     }
 
     @PutMapping("{id}")
-    public String updateOrder(@Valid @PathVariable int id, @Valid @RequestBody OrderDTO orderDTO) {
-        return "Update order";
+    public ResponseEntity<?> updateOrder(@Valid @PathVariable int id,
+                                         @Valid @RequestBody OrderDTO orderDTO) {
+        orderService.updateOrder(id, orderDTO);
+        return ResponseHandler.execute(null);
     }
 
     @DeleteMapping("{id}")
-    public String deleteOrder(@Valid @PathVariable int id) {
-        return "Delete order";
+    public ResponseEntity<?> deleteOrder(@Valid @PathVariable int id) {
+        orderService.deleteOrder(id);
+        return ResponseHandler.execute(null);
+    }
+
+    @GetMapping("/{user_id}")
+    public ResponseEntity<?> getOrderByUserId(
+            @Valid @PathVariable("user_id") Long userId,
+            @RequestParam("limit") int limit,
+            @RequestParam("page") int page) {
+        Page<OrderResponse> responsePage = orderService.getOrderByUserId(
+                userId,
+                PageRequest.of(page, limit, Sort.by("order_date").ascending())
+        );
+        int totalPages = responsePage.getTotalPages();
+        List<OrderResponse> orders = responsePage.getContent();
+        return ResponseHandler.execute(orders, totalPages);
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> getOrders(
+            @RequestParam("limit") int limit,
+            @RequestParam("page") int page) {
+        Page<OrderResponse> responsePage = orderService.getAllOrder(
+                PageRequest.of(page, limit, Sort.by("order_date").ascending())
+        );
+        int totalPages = responsePage.getTotalPages();
+        List<OrderResponse> orders = responsePage.getContent();
+        return ResponseHandler.execute(orders, totalPages);
     }
 }

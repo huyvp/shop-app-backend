@@ -86,7 +86,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(long id, ProductDTO productDTO) {
+    public void updateProduct(long id, ProductDTO productDTO) {
         productRepository.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
         Product newProduct = productMapper.toProduct(productDTO);
@@ -94,7 +94,7 @@ public class ProductService implements IProductService {
         Category category = categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         newProduct.setCategory(category);
-        return productRepository.save(newProduct);
+        productRepository.save(newProduct);
     }
 
     @Override
