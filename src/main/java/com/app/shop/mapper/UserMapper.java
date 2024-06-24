@@ -10,6 +10,8 @@ import org.mapstruct.MappingTarget;
 @Mapper
 public interface UserMapper {
     User toUserFromUserDTO(UserDTO userDTO);
+
     UserResponse toUserResponse(User user);
+
     void updateUser(@MappingTarget User user, UserUpdateDTO userUpdateDTO);
 }

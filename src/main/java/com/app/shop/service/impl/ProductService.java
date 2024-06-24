@@ -47,11 +47,13 @@ public class ProductService implements IProductService {
     private final UserMapper userMapper;
 
     @Override
-    public ProductResponse createProduct(ProductDTO productDTO) throws IOException {
-        categoryRepository.findById(productDTO.getCategoryId())
+    public ProductResponse createProduct(ProductDTO productDTO) {
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
-        Product product = productRepository.save(productMapper.toProduct(productDTO));
-        return productMapper.toProductResponse(product);
+        Product product = productMapper.toProduct(productDTO);
+        product.setCategory(category);
+        Product productSaved = productRepository.save(product);
+        return productMapper.toProductResponse(productSaved);
     }
 
     @Override

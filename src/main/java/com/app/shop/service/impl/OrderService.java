@@ -5,6 +5,7 @@ import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.OrderMapper;
 import com.app.shop.models.Order;
+import com.app.shop.models.User;
 import com.app.shop.repo.OrderRepository;
 import com.app.shop.repo.UserRepository;
 import com.app.shop.response.OrderResponse;
@@ -28,9 +29,10 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderResponse createOrder(OrderDTO orderDTO) {
-        userRepository.findById(orderDTO.getUserId())
+        User user = userRepository.findById(orderDTO.getUserId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         Order order = orderMapper.toOrder(orderDTO);
+        order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
         return orderMapper.toOrderResponse(savedOrder);

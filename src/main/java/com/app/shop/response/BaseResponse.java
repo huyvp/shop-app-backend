@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static com.app.shop.constant.Constants.Pattern.DATE;
@@ -15,7 +16,7 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 @AllArgsConstructor
 @Data
 @MappedSuperclass
-public class BaseResponse {
+public class BaseResponse implements Serializable {
     @JsonProperty("created_at")
     @JsonFormat(pattern = DATE, timezone = "Asia/Bangkok")
     private LocalDateTime createdAt;
