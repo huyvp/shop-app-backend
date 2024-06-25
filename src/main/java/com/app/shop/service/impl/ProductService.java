@@ -47,7 +47,7 @@ public class ProductService implements IProductService {
     private final UserMapper userMapper;
 
     @Override
-    public ProductResponse createProduct(ProductDTO productDTO) {
+    public ProductResponse createProduct(ProductDTO productDTO) throws IOException {
         Category category = categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         Product product = productMapper.toProduct(productDTO);

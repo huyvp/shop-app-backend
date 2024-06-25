@@ -2,10 +2,8 @@ package com.app.shop.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 
@@ -13,22 +11,23 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDTO {
     @NotBlank(message = "VALID_1001")
     @JsonProperty("fullname")
-    private String fullName;
+    String fullName;
     @NotBlank(message = "VALID_1002")
     @JsonProperty("phone_number")
-    private String phoneNumber;
-    private String address;
+    String phoneNumber;
+    String address;
     @NotBlank(message = "VALID_1003")
-    private String password;
+    String password;
     @JsonProperty("date_of_birth")
-    private Date dateOfBirth;
+    Date dateOfBirth;
     @JsonProperty("facebook_account_id")
-    private int facebookAccountId;
+    int facebookAccountId;
     @JsonProperty("google_account_id")
-    private int googleAccountId;
+    int googleAccountId;
     @JsonProperty("role_id")
-    private Long roleId;
+    Long roleId;
 }

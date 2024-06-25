@@ -34,6 +34,7 @@ public class OrderService implements IOrderService {
         Order order = orderMapper.toOrder(orderDTO);
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
+        order.setActive(true);
         Order savedOrder = orderRepository.save(order);
         return orderMapper.toOrderResponse(savedOrder);
     }

@@ -11,31 +11,32 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     UNCATEGORIZED(5000, HttpStatus.INTERNAL_SERVER_ERROR, "Uncategorized exception"),
     // ----------------------------------
+    // Related to AUTH
+    // ----------------------------------
+    AUTH_4000(4001, HttpStatus.FORBIDDEN, "Forbidden"),
+    AUTH_4001(4001, HttpStatus.UNAUTHORIZED, "Access Denied"),
+    AUTH_4002(4002, HttpStatus.UNAUTHORIZED, "Phone number or password is not correct"),
+    AUTH_4003(4003, HttpStatus.UNAUTHORIZED, "Bad Credentials"),
+    // ----------------------------------
     // Related to USER
     // ----------------------------------
     USER_3001(3001, HttpStatus.BAD_REQUEST, "User existed"),
-    USER_3002(3002, HttpStatus.BAD_REQUEST, "User not found"),
+    USER_3002(3002, HttpStatus.NOT_FOUND, "User not found"),
     // ----------------------------------
     // Related to USER
     // ----------------------------------
     ROLE_3001(3001, HttpStatus.BAD_REQUEST, "Role existed"),
-    ROLE_3002(3002, HttpStatus.BAD_REQUEST, "Role not found"),
-    // ----------------------------------
-    // Related to AUTH
-    // ----------------------------------
-    AUTH_4001(4001, HttpStatus.FORBIDDEN, "Forbidden"),
-    AUTH_4002(4002, HttpStatus.UNAUTHORIZED, "Phone number or password is not correct"),
-    AUTH_4003(4003, HttpStatus.UNAUTHORIZED, "Bad Credentials"),
+    ROLE_3002(3002, HttpStatus.NOT_FOUND, "Role not found"),
     // ----------------------------------
     // Related to CATEGORY
     // ----------------------------------
     CATEGORY_3001(3001, HttpStatus.BAD_REQUEST, "Category existed"),
-    CATEGORY_3002(3002, HttpStatus.BAD_REQUEST, "Category not found"),
+    CATEGORY_3002(3002, HttpStatus.NOT_FOUND, "Category not found"),
     // ----------------------------------
     // Related to PRODUCT
     // ----------------------------------
     PRODUCT_3001(3001, HttpStatus.BAD_REQUEST, "Product existed"),
-    PRODUCT_3002(3002, HttpStatus.BAD_REQUEST, "Product not found"),
+    PRODUCT_3002(3002, HttpStatus.NOT_FOUND, "Product not found"),
     // ----------------------------------
     // Related to ORDER
     // ----------------------------------

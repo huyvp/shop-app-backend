@@ -8,13 +8,16 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.prefix}/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserController {
     IUserService userService;
 
@@ -25,13 +28,17 @@ public class UserController {
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable int id,
+                                        @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
         userService.updateUser(id, userUpdateDTO);
         return ResponseHandler.execute(null);
     }
 
     @GetMapping()
     public ResponseEntity<?> getAllUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Username: {}", authentication.getName());
+        log.info("Roles: {}", authentication.getAuthorities());
         return ResponseHandler.execute(
                 userService.getAllUser()
         );
@@ -41,6 +48,12 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable int id) {
         return ResponseHandler.execute(
                 userService.getUserById(id)
+        );
+    }
+    @GetMapping(value = "/myInfo")
+    public ResponseEntity<?> getMyInfo() {
+        return ResponseHandler.execute(
+                userService.getMyInfo()
         );
     }
 }

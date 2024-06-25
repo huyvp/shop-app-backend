@@ -3,10 +3,10 @@ package com.app.shop.service.impl;
 import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserLoginDTO;
 import com.app.shop.dto.user.UserUpdateDTO;
+import com.app.shop.enums.Role;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.UserMapper;
-import com.app.shop.models.Role;
 import com.app.shop.models.User;
 import com.app.shop.repo.RoleRepository;
 import com.app.shop.repo.UserRepository;
@@ -21,22 +21,24 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserService implements IUserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
@@ -49,17 +51,22 @@ public class UserService implements IUserService {
     @Override
     public UserResponse createUser(UserDTO userDTO) {
         String phoneNumber = userDTO.getPhoneNumber();
-        if (userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new ShopAppException(ErrorCode.USER_3001);
-        }
+        Optional<User> userOptional = userRepository.findByPhoneNumber(phoneNumber);
+        if (userOptional.isPresent()) throw new ShopAppException(ErrorCode.USER_3001);
         User user = userMapper.toUserFromUserDTO(userDTO);
         user.setActive(true);
-        Role role = roleRepository.findById(userDTO.getRoleId())
-                .orElseThrow(() -> new ShopAppException(ErrorCode.ROLE_3002));
-        user.setRole(role);
+//        Role role = roleRepository.findById(userDTO.getRoleId())
+//                .orElseThrow(() -> new ShopAppException(ErrorCode.ROLE_3002));
+//        user.setRole(role);
+
         if (userDTO.getFacebookAccountId() == 0 || userDTO.getGoogleAccountId() == 0) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
+
         User savedUser = userRepository.save(user);
         return userMapper.toUserResponse(savedUser);
     }
@@ -91,7 +98,16 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse getUserById(long id) {
+        log.info("In method");
         User user = userRepository.findById(id)
+                .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public UserResponse getMyInfo() {
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByPhoneNumber(currentUser)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         return userMapper.toUserResponse(user);
     }
@@ -111,7 +127,7 @@ public class UserService implements IUserService {
             throw new ShopAppException(ErrorCode.AUTH_4003);
         }
         passwordEncoder.matches(user.getPassword(), userLoginDTO.getPassword());
-        return generateToken(userLoginDTO.getPhoneNumber());
+        return generateToken(user);
     }
 
     @Override
@@ -128,12 +144,13 @@ public class UserService implements IUserService {
         }
     }
 
-    public String generateToken(String phoneNumber) {
+    public String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS256);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(phoneNumber)
+                .subject(user.getPhoneNumber())
                 .issuer("nvh189")
                 .issueTime(new Date())
+                .claim("scope", scopeBuilder(user))
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -144,5 +161,13 @@ public class UserService implements IUserService {
         } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String scopeBuilder(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(user.getRoles())) {
+            user.getRoles().forEach(stringJoiner::add);
+        }
+        return stringJoiner.toString();
     }
 }

@@ -2,12 +2,11 @@ package com.app.shop.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.Set;
 
 import static com.app.shop.constant.Constants.Pattern.DOB;
 
@@ -15,14 +14,16 @@ import static com.app.shop.constant.Constants.Pattern.DOB;
 @NoArgsConstructor
 @Data
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    private int id;
+    int id;
     @JsonProperty("fullname")
-    private String fullName;
+    String fullName;
     @JsonProperty("phone_number")
-    private String phoneNumber;
-    private String address;
+    String phoneNumber;
+    String address;
     @JsonProperty("date_of_birth")
     @JsonFormat(pattern = DOB)
-    private Date dateOfBirth;
+    Date dateOfBirth;
+    Set<String> roles;
 }

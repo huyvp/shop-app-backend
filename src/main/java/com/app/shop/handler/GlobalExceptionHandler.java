@@ -27,15 +27,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = ShopAppException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<AppResponse<?>> handleShopException(ShopAppException ex) {
         AppResponse<?> appResponse = AppResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .code(ex.getErrorCode().getCode())
-                .status(HttpStatus.BAD_REQUEST)
-                .message(ex.getMessage())
+                .status(ex.getErrorCode().getHttpStatus())
+                .message(ex.getErrorCode().getMessage())
                 .build();
-        return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(ex.getErrorCode().getHttpStatus())
+                .body(appResponse);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

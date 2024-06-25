@@ -8,14 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+public class BaseEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")

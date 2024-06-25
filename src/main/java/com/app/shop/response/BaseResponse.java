@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static com.app.shop.constant.Constants.Pattern.DATE;
@@ -15,8 +15,9 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode
 @MappedSuperclass
-public class BaseResponse implements Serializable {
+public abstract class BaseResponse {
     @JsonProperty("created_at")
     @JsonFormat(pattern = DATE, timezone = "Asia/Bangkok")
     private LocalDateTime createdAt;
