@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -35,7 +36,6 @@ public class User extends BaseEntity {
     int facebookAccountId;
     @Column(name = "google_account_id")
     int googleAccountId;
-    //    @ManyToOne
-//    @JoinColumn(name = "role_id")
-    Set<String> roles;
+    @ManyToMany
+    Set<Role> roles;
 }

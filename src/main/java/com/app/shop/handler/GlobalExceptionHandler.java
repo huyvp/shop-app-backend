@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     ResponseEntity<AppResponse<?>> handleRestException(Exception ex) {
         AppResponse<?> appResponse = AppResponse.builder()
-                .timestamp(LocalDateTime.now())
                 .code(ErrorCode.UNCATEGORIZED.getCode())
                 .status(HttpStatus.BAD_REQUEST)
                 .message(ex.getMessage())
@@ -29,7 +28,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ShopAppException.class)
     ResponseEntity<AppResponse<?>> handleShopException(ShopAppException ex) {
         AppResponse<?> appResponse = AppResponse.builder()
-                .timestamp(LocalDateTime.now())
                 .code(ex.getErrorCode().getCode())
                 .status(ex.getErrorCode().getHttpStatus())
                 .message(ex.getErrorCode().getMessage())
@@ -45,11 +43,12 @@ public class GlobalExceptionHandler {
         String enumKey = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         ErrorCode errorCode = ErrorCode.valueOf(enumKey);
         AppResponse<?> appResponse = AppResponse.builder()
-                .timestamp(LocalDateTime.now())
                 .code(errorCode.getCode())
-                .status(HttpStatus.BAD_REQUEST)
+                .status(errorCode.getHttpStatus())
                 .message(errorCode.getMessage())
                 .build();
-        return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(appResponse);
     }
 }

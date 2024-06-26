@@ -5,7 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,4 +25,5 @@ public class UserUpdateDTO {
     String address;
     @JsonProperty("date_of_birth")
     Date dateOfBirth;
+    List<String> roles;
 }

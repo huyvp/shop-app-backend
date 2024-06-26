@@ -8,9 +8,9 @@ import com.app.shop.mapper.UserMapper;
 import com.app.shop.models.Category;
 import com.app.shop.models.Product;
 import com.app.shop.models.ProductImage;
-import com.app.shop.repo.CategoryRepository;
-import com.app.shop.repo.ProductImageRepository;
-import com.app.shop.repo.ProductRepository;
+import com.app.shop.repo.CategoryRepo;
+import com.app.shop.repo.ProductImageRepo;
+import com.app.shop.repo.ProductRepo;
 import com.app.shop.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import lombok.AccessLevel;
@@ -40,26 +40,26 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductService implements IProductService {
-    ProductRepository productRepository;
-    CategoryRepository categoryRepository;
-    ProductImageRepository productImageRepository;
+    ProductRepo productRepo;
+    CategoryRepo categoryRepo;
+    ProductImageRepo productImageRepo;
     ProductMapper productMapper;
     private final UserMapper userMapper;
 
     @Override
     public ProductResponse createProduct(ProductDTO productDTO) throws IOException {
-        Category category = categoryRepository.findById(productDTO.getCategoryId())
+        Category category = categoryRepo.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         Product product = productMapper.toProduct(productDTO);
         product.setCategory(category);
-        Product productSaved = productRepository.save(product);
+        Product productSaved = productRepo.save(product);
         return productMapper.toProductResponse(productSaved);
     }
 
     @Override
     public List<ProductImage> uploadImage(Long id, List<MultipartFile> files) throws IOException {
         List<ProductImage> productImages = new ArrayList<>();
-        Product product = productRepository.findById(id)
+        Product product = productRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
         if (files == null) throw new RuntimeException("Files is null");
         for (MultipartFile file : files) {
@@ -77,47 +77,47 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductResponse getProductById(long id) {
-        Product product = productRepository.findById(id)
+        Product product = productRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
         return productMapper.toProductResponse(product);
     }
 
     @Override
     public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest).map(productMapper::toProductResponse);
+        return productRepo.findAll(pageRequest).map(productMapper::toProductResponse);
     }
 
     @Override
     public void updateProduct(long id, ProductDTO productDTO) {
-        productRepository.findById(id)
+        productRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
         Product newProduct = productMapper.toProduct(productDTO);
         newProduct.setId(id);
-        Category category = categoryRepository.findById(productDTO.getCategoryId())
+        Category category = categoryRepo.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         newProduct.setCategory(category);
-        productRepository.save(newProduct);
+        productRepo.save(newProduct);
     }
 
     @Override
     public void deleteProduct(long id) {
-        Product product = productRepository.findById(id)
+        Product product = productRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
-        productRepository.delete(product);
+        productRepo.delete(product);
     }
 
     @Override
     public boolean existsByName(String name) {
-        return productRepository.existsByName(name);
+        return productRepo.existsByName(name);
     }
 
     public ProductImage createProductImage(Product product, String url) {
         ProductImage productImage = ProductImage.builder().product(product).imageUrl(url).build();
-        int imageSize = productImageRepository.findByProductId(product.getId()).size();
+        int imageSize = productImageRepo.findByProductId(product.getId()).size();
         if (imageSize >= MAXIMUM_IMAGES_PER_PRODUCT) {
             throw new ShopAppException(ErrorCode.FILE_2003);
         } else {
-            return productImageRepository.save(productImage);
+            return productImageRepo.save(productImage);
         }
     }
 

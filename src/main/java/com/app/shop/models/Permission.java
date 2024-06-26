@@ -4,19 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@Table(name = "roles")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "permissions")
 @Entity
-public class Role {
+public class Permission {
     @Id
     String name;
     String description;
-    @ManyToMany
-    Set<Permission> permissions;
 }
+

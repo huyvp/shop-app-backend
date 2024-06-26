@@ -1,4 +1,3 @@
-
 create table users(
 	id serial4 primary key, -- auto incrementing four-byte integer
 	fullname varchar(100) default '',
@@ -8,7 +7,7 @@ create table users(
 	created_at timestamp,
 	updated_at timestamp,
 	is_active boolean default true,
-	date_of_birth time,
+	date_of_birth timestamp,
 	facebook_account_id int default 0,
 	google_account_id int default 0
 );

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "social_account")
+@Table(name = "social_accounts")
 @Entity
 public class SocialAccount {
     @Id
@@ -17,7 +17,7 @@ public class SocialAccount {
     @Column(name = "provider", nullable = false, length = 50)
     private String provider;
     @Column(name = "provider_id", length = 50)
-    private int providerId;
+    private String providerId;
     @Column(name = "name", length = 150)
     private String name;
     @Column(name = "email", length = 150)

@@ -18,8 +18,9 @@ import static com.app.shop.constant.Constants.Pattern.TIME;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AppResponse<T> {
+    @Builder.Default
     @JsonFormat(pattern = TIME, timezone = "Asia/Bangkok")
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp = LocalDateTime.now();
     private int code;
     private HttpStatus status;
     private String message;

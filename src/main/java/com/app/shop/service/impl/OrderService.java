@@ -6,8 +6,8 @@ import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.OrderMapper;
 import com.app.shop.models.Order;
 import com.app.shop.models.User;
-import com.app.shop.repo.OrderRepository;
-import com.app.shop.repo.UserRepository;
+import com.app.shop.repo.OrderRepo;
+import com.app.shop.repo.UserRepo;
 import com.app.shop.response.OrderResponse;
 import com.app.shop.service.IOrderService;
 import lombok.AccessLevel;
@@ -23,55 +23,55 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderService implements IOrderService {
-    UserRepository userRepository;
+    UserRepo userRepo;
     OrderMapper orderMapper;
-    OrderRepository orderRepository;
+    OrderRepo orderRepo;
 
     @Override
     public OrderResponse createOrder(OrderDTO orderDTO) {
-        User user = userRepository.findById(orderDTO.getUserId())
+        User user = userRepo.findById(orderDTO.getUserId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         Order order = orderMapper.toOrder(orderDTO);
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         order.setActive(true);
-        Order savedOrder = orderRepository.save(order);
+        Order savedOrder = orderRepo.save(order);
         return orderMapper.toOrderResponse(savedOrder);
     }
 
     @Override
     public OrderResponse getOrderById(long id) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ORDER_3002));
         return orderMapper.toOrderResponse(order);
     }
 
     @Override
     public Page<OrderResponse> getAllOrder(PageRequest pageRequest) {
-        return orderRepository.findAll(pageRequest)
+        return orderRepo.findAll(pageRequest)
                 .map(orderMapper::toOrderResponse);
     }
 
     @Override
     public Page<OrderResponse> getOrderByUserId(long userId, PageRequest pageRequest) {
-        userRepository.findById(userId)
+        userRepo.findById(userId)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
-        return orderRepository.findByUserId(userId, pageRequest)
+        return orderRepo.findByUserId(userId, pageRequest)
                 .map(orderMapper::toOrderResponse);
     }
 
     @Override
     public void updateOrder(long id, OrderDTO orderDTO) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ORDER_3002));
         orderMapper.updateOrder(orderDTO, order);
-        orderRepository.save(order);
+        orderRepo.save(order);
     }
 
     @Override
     public void deleteOrder(long id) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ORDER_3002));
-        orderRepository.delete(order);
+        orderRepo.delete(order);
     }
 }

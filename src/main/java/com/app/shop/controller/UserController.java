@@ -1,6 +1,5 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserUpdateDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,15 +28,13 @@ public class UserController {
     @PutMapping(value = "{id}")
     public ResponseEntity<?> updateUser(@PathVariable int id,
                                         @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
-        userService.updateUser(id, userUpdateDTO);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute(
+                userService.updateUser(id, userUpdateDTO)
+        );
     }
 
     @GetMapping()
     public ResponseEntity<?> getAllUser() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: {}", authentication.getName());
-        log.info("Roles: {}", authentication.getAuthorities());
         return ResponseHandler.execute(
                 userService.getAllUser()
         );
@@ -50,6 +46,7 @@ public class UserController {
                 userService.getUserById(id)
         );
     }
+
     @GetMapping(value = "/myInfo")
     public ResponseEntity<?> getMyInfo() {
         return ResponseHandler.execute(

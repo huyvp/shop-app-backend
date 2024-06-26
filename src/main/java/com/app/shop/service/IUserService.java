@@ -12,12 +12,14 @@ import java.util.List;
 public interface IUserService {
     UserResponse createUser(UserDTO userDTO);
 
-    void updateUser(long id, UserUpdateDTO userUpdateDTO);
+    @PostAuthorize("returnObject.phoneNumber == authentication.name")
+    UserResponse updateUser(long id, UserUpdateDTO userUpdateDTO);
 
     void deleteUser(long id);
 
     @PreAuthorize("hasRole('ADMIN')")
     List<UserResponse> getAllUser();
+
     @PostAuthorize("returnObject.phoneNumber == authentication.name")
     UserResponse getUserById(long id);
 

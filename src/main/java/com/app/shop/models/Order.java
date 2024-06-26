@@ -46,10 +46,6 @@ public class Order {
     private String trackingNumber;
     @Column(name = "payment_method")
     private String paymentMethod;
-//    @Column(name = "payment_status")
-//    private String paymentStatus;
-//    @Column(name = "payment_date")
-//    private Date paymentDate;
     @Column(name = "active")
     private Boolean active;
 }
