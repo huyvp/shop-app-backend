@@ -23,6 +23,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,8 +54,10 @@ public class UserService implements IUserService {
     @Override
     public UserResponse createUser(UserDTO userDTO) {
         String phoneNumber = userDTO.getPhoneNumber();
-        Optional<User> userOptional = userRepo.findByPhoneNumber(phoneNumber);
-        if (userOptional.isPresent()) throw new ShopAppException(ErrorCode.USER_3001);
+
+        if (userRepo.findByPhoneNumber(phoneNumber).isPresent())
+            throw new ShopAppException(ErrorCode.USER_3001);
+
         User user = userMapper.toUserFromUserDTO(userDTO);
         user.setActive(true);
 
@@ -75,9 +79,9 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         userMapper.updateUser(user, userUpdateDTO);
 
-        var roles = roleRepo.findAllById(userUpdateDTO.getRoles());
+        List<Role> roles = roleRepo.findAllById(userUpdateDTO.getRoles());
         user.setRoles(new HashSet<>(roles));
-//        userRepo.save(user);
+
         return userMapper.toUserResponse(userRepo.save(user));
     }
 
@@ -89,8 +93,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserResponse> getAllUser() {
-        List<User> users = userRepo.findAll();
+    public List<UserResponse> getAllUser(PageRequest pageRequest) {
+        Page<User> users = userRepo.findAll(pageRequest);
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : users) {
             userResponses.add(userMapper.toUserResponse(user));
@@ -152,7 +156,9 @@ public class UserService implements IUserService {
                 .issuer("nvh189")
                 .issueTime(new Date())
                 .claim("scope", scopeBuilder(user.getRoles()))
-                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .expirationTime(new Date(
+                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                ))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);
@@ -167,7 +173,12 @@ public class UserService implements IUserService {
     private String scopeBuilder(Set<Role> roles) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (!roles.isEmpty()) {
-            roles.forEach(s -> stringJoiner.add(s.getName()));
+            roles.forEach(role -> {
+                stringJoiner.add("ROLE_" + role.getName());
+                if (!role.getPermissions().isEmpty()) {
+                    role.getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
+                }
+            });
         }
         return stringJoiner.toString();
     }

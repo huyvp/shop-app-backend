@@ -25,4 +25,5 @@ public class UserResponse {
     @JsonProperty("date_of_birth")
     @JsonFormat(pattern = DOB)
     Date dateOfBirth;
+    Set<RoleResponse> roles;
 }

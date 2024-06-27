@@ -1,6 +1,8 @@
 package com.app.shop.service.impl;
 
 import com.app.shop.dto.PermissionDTO;
+import com.app.shop.exception.ErrorCode;
+import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.PermissionMapper;
 import com.app.shop.models.Permission;
 import com.app.shop.repo.PermissionRepo;
@@ -22,19 +24,27 @@ public class PermissionService implements IPermissionService {
 
     @Override
     public PermissionResponse create(PermissionDTO permissionDTO) {
+        if (permissionRepo.findById(permissionDTO.getName()).isPresent())
+            throw new ShopAppException(ErrorCode.PERMISSION_3001);
+
         Permission permission = permissionMapper.toPermission(permissionDTO);
         permission = permissionRepo.save(permission);
+
         return permissionMapper.toPermissionResponse(permission);
     }
 
     @Override
     public List<PermissionResponse> getAll() {
         var permissions = permissionRepo.findAll();
-        return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
+        return permissions.stream()
+                .map(permissionMapper::toPermissionResponse)
+                .toList();
     }
 
     @Override
     public void delete(String permission) {
+        permissionRepo.findById(permission)
+                .orElseThrow(() -> new ShopAppException(ErrorCode.PERMISSION_3002));
         permissionRepo.deleteById(permission);
     }
 }

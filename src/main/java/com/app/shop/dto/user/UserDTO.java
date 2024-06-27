@@ -1,5 +1,6 @@
 package com.app.shop.dto.user;
 
+import com.app.shop.validator.DateOfBirth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -23,6 +24,7 @@ public class UserDTO {
     @NotBlank(message = "VALID_1003")
     String password;
     @JsonProperty("date_of_birth")
+    @DateOfBirth(min = 20, message = "VALID_1012")
     Date dateOfBirth;
     @JsonProperty("facebook_account_id")
     int facebookAccountId;

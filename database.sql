@@ -13,10 +13,27 @@ create table users(
 );
 
 create table roles(
-	id int primary key,
-	name varchar(20) not null
+	name varchar(20) primary key,
+	description varchar(100) 
 );
-select * from users;
+
+create table permissions (
+	name varchar(20) primary key,
+	description varchar(100) 
+);
+
+create table roles_permissions(
+	role_name varchar(20) primary key,
+	permissions_name varchar(20) primary key,
+	foreign key (role_name) references roles(name),
+	foreign key (permissions_name) references permissions(name)
+);
+
+create table users_roles(
+	userId int primary key,
+	roles_name varchar(20) primary key
+);
+
 alter table users add column role_id int;
 alter table users add foreign key (role_id) references roles(id);
 

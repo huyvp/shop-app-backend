@@ -92,7 +92,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"STAFF\",\r\n    \"description\": \"Staff role\"\r\n}",
+							"raw": "{\r\n    \"name\": \"MODIFY_DATA\",\r\n    \"description\": \"Staff can modify data\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -113,11 +113,52 @@
 					"response": []
 				},
 				{
-					"name": "api/v1/permissions",
+					"name": "api/v1/permissions/{name}",
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "{{URL.PREFIX}}/permissions/STAFT"
+						"url": "{{URL.PREFIX}}/permissions/MODIFY_DATA"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "role",
+			"item": [
+				{
+					"name": "api/v1/roles",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"STAFF\",\r\n    \"description\": \"Staff role\",\r\n    \"permissions\": [\r\n        \"MODIFY_DATA\",\r\n        \"DELETE_DATA\",\r\n        \"CREATE_DATA\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL.PREFIX}}/roles"
+					},
+					"response": []
+				},
+				{
+					"name": "api/v1/roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL.PREFIX}}/roles"
+					},
+					"response": []
+				},
+				{
+					"name": "api/v1/roles/{name}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL.PREFIX}}/roles/STAFF"
 					},
 					"response": []
 				}
@@ -251,7 +292,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullname\": \"UserTest1\",\r\n    \"phone_number\": \"0123456\",\r\n    \"address\": \"Address for test\",\r\n    \"password\": \"pass\",\r\n    \"date_of_birth\": \"2000-09-18\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0\r\n}",
+							"raw": "{\r\n    \"fullname\": \"UserTest2\",\r\n    \"phone_number\": \"0123457\",\r\n    \"address\": \"Address for test\",\r\n    \"password\": \"pass\",\r\n    \"date_of_birth\": \"2000-09-18\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -286,7 +327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phone_number\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+							"raw": "{\r\n    \"phone_number\": \"0123457\",\r\n    \"password\": \"pass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,47 +362,55 @@
 				},
 				{
 					"name": "api/v1/users",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullname\": \"UserTest1\",\r\n    \"phone_number\": \"0123457\",\r\n    \"address\": \"Address for test\",\r\n    \"date_of_birth\": \"2000-09-19\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0,\r\n    \"roles\": [\r\n        \"STAFF\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL.PREFIX}}/users/3"
 					},
+					"response": []
+				},
+				{
+					"name": "api/v1/users",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
+						"url": {
+							"raw": "{{URL.PREFIX}}/users?page=0&limit=5",
+							"host": [
+								"{{URL.PREFIX}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
 								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "default",
-									"disabled": true
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5"
 								}
 							]
-						},
-						"url": "{{URL.PREFIX}}/users"
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "api/v1/users/{id}",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "default",
-									"disabled": true
-								}
-							]
-						},
-						"url": "{{URL.PREFIX}}/users"
+						"url": "{{URL.PREFIX}}/users/2"
 					},
 					"response": []
 				},
@@ -371,9 +420,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -389,7 +435,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "{{URL.PREFIX}}/users/1"
+						"url": "{{URL.PREFIX}}/users/2"
 					},
 					"response": []
 				}

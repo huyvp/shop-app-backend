@@ -13,7 +13,7 @@ public enum ErrorCode {
     // ----------------------------------
     // Related to AUTH
     // ----------------------------------
-    AUTH_4000(4001, HttpStatus.FORBIDDEN, "Forbidden"),
+    AUTH_4000(4000, HttpStatus.FORBIDDEN, "Forbidden"),
     AUTH_4001(4001, HttpStatus.UNAUTHORIZED, "Access Denied"),
     AUTH_4002(4002, HttpStatus.UNAUTHORIZED, "Phone number or password is not correct"),
     AUTH_4003(4003, HttpStatus.UNAUTHORIZED, "Bad Credentials"),
@@ -23,10 +23,15 @@ public enum ErrorCode {
     USER_3001(3001, HttpStatus.BAD_REQUEST, "User existed"),
     USER_3002(3002, HttpStatus.NOT_FOUND, "User not found"),
     // ----------------------------------
-    // Related to USER
+    // Related to ROLE
     // ----------------------------------
     ROLE_3001(3001, HttpStatus.BAD_REQUEST, "Role existed"),
     ROLE_3002(3002, HttpStatus.NOT_FOUND, "Role not found"),
+    // ----------------------------------
+    // Related to PERMISSION
+    // ----------------------------------
+    PERMISSION_3001(3001, HttpStatus.BAD_REQUEST, "Permission existed"),
+    PERMISSION_3002(3002, HttpStatus.NOT_FOUND, "Permission not found"),
     // ----------------------------------
     // Related to CATEGORY
     // ----------------------------------
@@ -67,6 +72,8 @@ public enum ErrorCode {
     VALID_1009(1008, HttpStatus.BAD_REQUEST, "Shipping address is required"),
     VALID_1010(1010, HttpStatus.BAD_REQUEST, "Payment method is required"),
     VALID_1011(1011, HttpStatus.BAD_REQUEST, "Number of product must be greater than 1"),
+
+    VALID_1012(1012, HttpStatus.BAD_REQUEST, "Age must be at least {min}"),
     ;
     private int code;
     private HttpStatus httpStatus;

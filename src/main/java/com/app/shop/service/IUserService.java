@@ -4,6 +4,7 @@ import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserLoginDTO;
 import com.app.shop.dto.user.UserUpdateDTO;
 import com.app.shop.response.UserResponse;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -17,8 +18,8 @@ public interface IUserService {
 
     void deleteUser(long id);
 
-    @PreAuthorize("hasRole('ADMIN')")
-    List<UserResponse> getAllUser();
+    @PreAuthorize("hasAuthority('MODIFY_DATA')")
+    List<UserResponse> getAllUser(PageRequest pageRequest);
 
     @PostAuthorize("returnObject.phoneNumber == authentication.name")
     UserResponse getUserById(long id);

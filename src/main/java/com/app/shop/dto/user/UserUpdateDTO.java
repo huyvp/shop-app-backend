@@ -1,5 +1,6 @@
 package com.app.shop.dto.user;
 
+import com.app.shop.validator.DateOfBirth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -23,6 +24,7 @@ public class UserUpdateDTO {
     @JsonProperty("phone_number")
     String phoneNumber;
     String address;
+    @DateOfBirth(min = 20, message = "VALID_1012")
     @JsonProperty("date_of_birth")
     Date dateOfBirth;
     List<String> roles;
