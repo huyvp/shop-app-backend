@@ -3,11 +3,13 @@ package com.app.shop.service.impl;
 import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserLoginDTO;
 import com.app.shop.dto.user.UserUpdateDTO;
+import com.app.shop.entity.InvalidatedToken;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.UserMapper;
-import com.app.shop.models.Role;
-import com.app.shop.models.User;
+import com.app.shop.entity.Role;
+import com.app.shop.entity.User;
+import com.app.shop.repo.InvalidatedTokenRepo;
 import com.app.shop.repo.RoleRepo;
 import com.app.shop.repo.UserRepo;
 import com.app.shop.response.UserResponse;
@@ -45,11 +47,20 @@ import static com.app.shop.constant.Constants.PreDefineRole.ROLE_USER;
 public class UserService implements IUserService {
     UserRepo userRepo;
     RoleRepo roleRepo;
+    InvalidatedTokenRepo invalidatedTokenRepo;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+
     @NonFinal
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
+    @NonFinal
+    @Value("${jwt.valid-duration}")
+    protected long VALID_DURATION;
+    @NonFinal
+    @Value("${jwt.refreshable-duration}")
+    protected long REFRESH_ABLE_DURATION;
+
 
     @Override
     public UserResponse createUser(UserDTO userDTO) {
@@ -136,14 +147,70 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean checkTokenTest(String token) {
+    public boolean introspect(String token) {
+        try {
+            verifyToken(token, false);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void logout(String token) {
+        try {
+            SignedJWT signedToken = verifyToken(token, true);
+            String tokenId = signedToken.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signedToken.getJWTClaimsSet().getExpirationTime();
+            InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                    .id(tokenId)
+                    .expiryTime(expiryTime)
+                    .build();
+            invalidatedTokenRepo.save(invalidatedToken);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String refreshToken(String token) {
+        SignedJWT signedToken = verifyToken(token, true);
+        try {
+            String tokenId = signedToken.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signedToken.getJWTClaimsSet().getExpirationTime();
+
+            InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                    .id(tokenId)
+                    .expiryTime(expiryTime)
+                    .build();
+            invalidatedTokenRepo.save(invalidatedToken);
+            String phoneNumber = signedToken.getJWTClaimsSet().getSubject();
+
+            User user = userRepo.findByPhoneNumber(phoneNumber)
+                    .orElseThrow(() -> new ShopAppException(ErrorCode.AUTH_4001));
+            return generateToken(user);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private SignedJWT verifyToken(String token, boolean isRefresh) {
         boolean verified;
         try {
             JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
             SignedJWT signedJWT = SignedJWT.parse(token);
-            Date expireTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+            Date expireTime = isRefresh
+                    ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESH_ABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                    : signedJWT.getJWTClaimsSet().getExpirationTime();
             verified = signedJWT.verify(verifier);
-            return verified && expireTime.after(new Date());
+
+            if (!verified && expireTime.after(new Date()))
+                throw new ShopAppException(ErrorCode.AUTH_4001);
+            if (invalidatedTokenRepo.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+                throw new ShopAppException(ErrorCode.AUTH_4001);
+            return signedJWT;
         } catch (JOSEException | ParseException e) {
             throw new RuntimeException(e);
         }
@@ -157,8 +224,9 @@ public class UserService implements IUserService {
                 .issueTime(new Date())
                 .claim("scope", scopeBuilder(user.getRoles()))
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(jwsHeader, payload);

@@ -4,7 +4,7 @@ import com.app.shop.dto.PermissionDTO;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.PermissionMapper;
-import com.app.shop.models.Permission;
+import com.app.shop.entity.Permission;
 import com.app.shop.repo.PermissionRepo;
 import com.app.shop.response.PermissionResponse;
 import com.app.shop.service.IPermissionService;

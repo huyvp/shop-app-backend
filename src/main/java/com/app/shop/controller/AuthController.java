@@ -35,7 +35,20 @@ public class AuthController {
     @PostMapping("introspect")
     public ResponseEntity<?> introspect(@RequestParam("token") String token) {
         return ResponseHandler.execute(
-                userService.checkTokenTest(token)
+                userService.introspect(token)
+        );
+    }
+
+    @PostMapping(value = "logout")
+    public ResponseEntity<?> logout(@RequestParam("token") String token) {
+        userService.logout(token);
+        return ResponseHandler.execute(null);
+    }
+
+    @PostMapping(value = "refresh")
+    public ResponseEntity<?> refresh(@RequestParam("token") String token) {
+        return ResponseHandler.execute(
+                userService.refreshToken(token)
         );
     }
 }

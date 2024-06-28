@@ -339,6 +339,85 @@
 					"response": []
 				},
 				{
+					"name": "api/v1/auth/logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "default"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL.PREFIX}}/auth/logout"
+					},
+					"response": []
+				},
+				{
+					"name": "api/v1/auth/refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set token to collection variable\", function() {\r",
+									"    var token = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"token\", token.result);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "default"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL.PREFIX}}/auth/refresh"
+					},
+					"response": []
+				},
+				{
 					"name": "api/v1/auth/introspect",
 					"request": {
 						"auth": {

@@ -17,6 +17,7 @@ public enum ErrorCode {
     AUTH_4001(4001, HttpStatus.UNAUTHORIZED, "Access Denied"),
     AUTH_4002(4002, HttpStatus.UNAUTHORIZED, "Phone number or password is not correct"),
     AUTH_4003(4003, HttpStatus.UNAUTHORIZED, "Bad Credentials"),
+    AUTH_4004(4004, HttpStatus.UNAUTHORIZED, "Invalid token"),
     // ----------------------------------
     // Related to USER
     // ----------------------------------

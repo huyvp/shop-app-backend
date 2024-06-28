@@ -21,3 +21,5 @@ api:
   prefix: api/v1
 jwt:
   signerKey: SpringBootTrainingsdfhsdfgsr4gsfgsregsfgsfdg#$%S%G
+  valid-duration: 5
+  refreshable-duration: 120

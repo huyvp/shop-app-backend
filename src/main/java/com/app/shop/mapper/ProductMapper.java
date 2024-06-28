@@ -1,7 +1,7 @@
 package com.app.shop.mapper;
 
 import com.app.shop.dto.product.ProductDTO;
-import com.app.shop.models.Product;
+import com.app.shop.entity.Product;
 import com.app.shop.response.ProductResponse;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;

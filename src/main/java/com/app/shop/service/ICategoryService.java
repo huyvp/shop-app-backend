@@ -1,7 +1,7 @@
 package com.app.shop.service;
 
 import com.app.shop.dto.CategoryDTO;
-import com.app.shop.models.Category;
+import com.app.shop.entity.Category;
 
 import java.util.List;
 

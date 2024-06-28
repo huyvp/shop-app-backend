@@ -1,7 +1,7 @@
 package com.app.shop.config;
 
-import com.app.shop.models.Role;
-import com.app.shop.models.User;
+import com.app.shop.entity.Role;
+import com.app.shop.entity.User;
 import com.app.shop.repo.RoleRepo;
 import com.app.shop.repo.UserRepo;
 import lombok.extern.slf4j.Slf4j;

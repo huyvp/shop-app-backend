@@ -1,7 +1,7 @@
 package com.app.shop.service;
 
 import com.app.shop.dto.product.ProductDTO;
-import com.app.shop.models.ProductImage;
+import com.app.shop.entity.ProductImage;
 import com.app.shop.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

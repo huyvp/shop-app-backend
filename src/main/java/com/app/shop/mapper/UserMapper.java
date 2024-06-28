@@ -2,7 +2,7 @@ package com.app.shop.mapper;
 
 import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserUpdateDTO;
-import com.app.shop.models.User;
+import com.app.shop.entity.User;
 import com.app.shop.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

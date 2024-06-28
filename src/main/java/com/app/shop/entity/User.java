@@ -1,10 +1,9 @@
-package com.app.shop.models;
+package com.app.shop.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 

@@ -1,5 +1,6 @@
 package com.app.shop.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,12 @@ public class SecurityConfig {
     private final String[] ENDPOINTS = {"api/v1/auth/*"};
     @Value("${jwt.signerKey}")
     protected String signingKey;
+    private final CustomJWTDecoder customJWTDecoder;
 
+    @Autowired
+    public SecurityConfig(CustomJWTDecoder customJWTDecoder) {
+        this.customJWTDecoder = customJWTDecoder;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -35,20 +41,12 @@ public class SecurityConfig {
         );
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(
-                jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+                jwtConfigurer -> jwtConfigurer.decoder(customJWTDecoder)
                         .jwtAuthenticationConverter(jwtAuthenticationConverter())
         ).authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
-    }
-
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signingKey.getBytes(), "HS256");
-        return NimbusJwtDecoder.withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS256)
-                .build();
     }
 
     @Bean

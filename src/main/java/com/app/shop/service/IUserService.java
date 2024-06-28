@@ -28,5 +28,9 @@ public interface IUserService {
 
     String login(UserLoginDTO userLoginDTO);
 
-    boolean checkTokenTest(String token);
+    void logout(String token);
+
+    String refreshToken(String token);
+
+    boolean introspect(String token);
 }

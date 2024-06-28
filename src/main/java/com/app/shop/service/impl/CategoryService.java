@@ -3,7 +3,7 @@ package com.app.shop.service.impl;
 import com.app.shop.dto.CategoryDTO;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
-import com.app.shop.models.Category;
+import com.app.shop.entity.Category;
 import com.app.shop.repo.CategoryRepo;
 import com.app.shop.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
