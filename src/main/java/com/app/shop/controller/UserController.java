@@ -1,5 +1,6 @@
 package com.app.shop.controller;
 
+import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserUpdateDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.response.UserResponse;
@@ -24,6 +25,14 @@ import java.util.List;
 @Slf4j
 public class UserController {
     IUserService userService;
+
+    @PostMapping
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
+        log.info("====================== Controller create user =============================");
+        return ResponseHandler.execute(
+                userService.createUser(userDTO)
+        );
+    }
 
     @DeleteMapping(value = "{id}")
     public ResponseEntity<?> deleteUser(@PathVariable int id) {

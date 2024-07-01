@@ -64,6 +64,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse createUser(UserDTO userDTO) {
+        log.info("Create user service");
         String phoneNumber = userDTO.getPhoneNumber();
 
         if (userRepo.findByPhoneNumber(phoneNumber).isPresent())
