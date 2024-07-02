@@ -6,6 +6,7 @@ import com.app.shop.repo.RoleRepo;
 import com.app.shop.repo.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,8 +29,12 @@ public class DefaultConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "spring",
+            value = "datasource.driver-class-name",
+            havingValue = "org.postgresql.Driver"
+    )
     ApplicationRunner applicationRunner(UserRepo userRepo, RoleRepo roleRepo) {
-        log.info("Initializing application start");
+        log.info("Initializing application start .......");
         return args -> {
             if (userRepo.findByPhoneNumber(ADMIN_USERNAME).isEmpty()) {
                 roleRepo.save(Role.builder()

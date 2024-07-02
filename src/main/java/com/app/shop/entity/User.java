@@ -35,6 +35,6 @@ public class User extends BaseEntity {
     int facebookAccountId;
     @Column(name = "google_account_id")
     int googleAccountId;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     Set<Role> roles;
 }

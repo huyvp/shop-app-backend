@@ -30,6 +30,7 @@ import java.util.Date;
 @SpringBootTest
 @Slf4j
 @AutoConfigureMockMvc
+@TestPropertySource("/test.properties")
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
