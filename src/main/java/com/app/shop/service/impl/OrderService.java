@@ -1,11 +1,11 @@
 package com.app.shop.service.impl;
 
 import com.app.shop.dto.OrderDTO;
+import com.app.shop.entity.Order;
+import com.app.shop.entity.User;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.OrderMapper;
-import com.app.shop.entity.Order;
-import com.app.shop.entity.User;
 import com.app.shop.repo.OrderRepo;
 import com.app.shop.repo.UserRepo;
 import com.app.shop.response.OrderResponse;
@@ -18,6 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import static com.app.shop.constant.Constants.ORDER_STATUS.PENDING;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +38,12 @@ public class OrderService implements IOrderService {
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         order.setActive(true);
+        order.setStatus(PENDING);
         Order savedOrder = orderRepo.save(order);
+        Date shippingDate = orderDTO.getShippingDate();
+        if (shippingDate == null || shippingDate.before(new Date())){
+            throw new ShopAppException(ErrorCode.ORDER_3003);
+        }
         return orderMapper.toOrderResponse(savedOrder);
     }
 

@@ -21,4 +21,11 @@ public class Constants {
         String ADMIN_PASSWORD = "admin";
     }
 
+    public interface ORDER_STATUS {
+        String PENDING = "pending";
+        String PROCESSING = "processing";
+        String SHIPPED = "shipped";
+        String DELIVERED = "delivered";
+        String CANCELLED = "cancelled";
+    }
 }

@@ -48,6 +48,7 @@ public enum ErrorCode {
     // ----------------------------------
     ORDER_3001(3001, HttpStatus.BAD_REQUEST, "Order existed"),
     ORDER_3002(3002, HttpStatus.BAD_REQUEST, "Order not found"),
+    ORDER_3003(3003, HttpStatus.BAD_REQUEST, "Shipping date must be at least today"),
     // ----------------------------------
     // Related to FILE
     // ----------------------------------

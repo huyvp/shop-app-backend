@@ -4,9 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class ShopAppException extends RuntimeException {
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public ShopAppException(ErrorCode errorCode) {
         super(errorCode.getMessage());

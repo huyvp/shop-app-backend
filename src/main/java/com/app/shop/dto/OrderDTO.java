@@ -1,10 +1,13 @@
 package com.app.shop.dto;
 
+import com.app.shop.validator.DateAfterNow;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,6 +34,9 @@ public class OrderDTO {
     @JsonProperty("shipping_address")
     @NotBlank(message = "VALID_1009")
     String shippingAddress;
+    @JsonProperty("shipping_date")
+    @DateAfterNow(message = "ORDER_3003")
+    Date shippingDate;
     @JsonProperty("payment_method")
     @NotBlank(message = "VALID_1010")
     String paymentMethod;

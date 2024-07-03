@@ -6,21 +6,21 @@ import com.app.shop.exception.ShopAppException;
 import com.app.shop.entity.Category;
 import com.app.shop.repo.CategoryRepo;
 import com.app.shop.service.ICategoryService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
 @Transactional
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryService implements ICategoryService {
-    private final CategoryRepo categoryRepo;
-
-    @Autowired
-    public CategoryService(CategoryRepo categoryRepo) {
-        this.categoryRepo = categoryRepo;
-    }
+    CategoryRepo categoryRepo;
 
     @Override
     public Category createCategory(CategoryDTO categoryDTO) {
