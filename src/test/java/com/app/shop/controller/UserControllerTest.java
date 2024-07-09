@@ -1,6 +1,5 @@
 package com.app.shop.controller;
 
-import com.app.shop.config.SecurityConfig;
 import com.app.shop.dto.user.UserDTO;
 import com.app.shop.response.UserResponse;
 import com.app.shop.service.IUserService;
@@ -12,18 +11,14 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.http.HttpResponse;
 import java.util.Calendar;
 import java.util.Date;
 

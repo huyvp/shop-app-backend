@@ -24,7 +24,7 @@ public class UserUpdateDTO {
     @JsonProperty("phone_number")
     String phoneNumber;
     String address;
-    @DateOfBirth(min = 20, message = "VALID_1012")
+    @DateOfBirth(min = 20, message = "VALID_1013")
     @JsonProperty("date_of_birth")
     Date dateOfBirth;
     List<String> roles;

@@ -19,11 +19,13 @@ public class OrderDTO {
     @JsonProperty("user_id")
     Long userId;
     @JsonProperty("fullname")
+    @NotBlank(message = "VALID_1001")
     String fullName;
     String email;
     @JsonProperty("phone_number")
     @NotBlank(message = "VALID_1002")
     String phoneNumber;
+    @NotBlank(message = "VALID_1013")
     String address;
     String note;
     @JsonProperty("total_money")

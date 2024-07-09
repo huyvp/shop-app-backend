@@ -40,10 +40,6 @@ public class OrderService implements IOrderService {
         order.setActive(true);
         order.setStatus(PENDING);
         Order savedOrder = orderRepo.save(order);
-        Date shippingDate = orderDTO.getShippingDate();
-        if (shippingDate == null || shippingDate.before(new Date())){
-            throw new ShopAppException(ErrorCode.ORDER_3003);
-        }
         return orderMapper.toOrderResponse(savedOrder);
     }
 

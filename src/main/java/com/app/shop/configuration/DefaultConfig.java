@@ -1,4 +1,4 @@
-package com.app.shop.config;
+package com.app.shop.configuration;
 
 import com.app.shop.entity.Role;
 import com.app.shop.entity.User;

@@ -24,7 +24,7 @@ public class UserDTO {
     @NotBlank(message = "VALID_1003")
     String password;
     @JsonProperty("date_of_birth")
-    @DateOfBirth(min = 20, message = "VALID_1012")
+    @DateOfBirth(min = 20, message = "VALID_1013")
     Date dateOfBirth;
     @JsonProperty("facebook_account_id")
     int facebookAccountId;

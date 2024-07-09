@@ -17,15 +17,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySourceS;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -140,10 +141,9 @@ public class UserServiceTest {
         assertEquals("password", user.getPassword());
 
     }
-
     @Test
     @WithMockUser(username = "012345678")
-    void getMyInfo_valid_success() {
+    void getMyInfo_valid_success(){
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.of(user));
         when(userMapper.toUserResponse(user)).thenReturn(userResponse);
 
@@ -152,10 +152,9 @@ public class UserServiceTest {
         assertEquals("012345678", response.getPhoneNumber());
 
     }
-
     @Test
     @WithMockUser(username = "012345678")
-    void getMyInfo_notFoundUser_fail() {
+    void getMyInfo_notFoundUser_fail(){
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.empty());
 
         var exception = assertThrows(ShopAppException.class, () -> userService.getMyInfo());

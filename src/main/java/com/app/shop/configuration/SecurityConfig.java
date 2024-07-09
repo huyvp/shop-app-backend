@@ -1,4 +1,4 @@
-package com.app.shop.config;
+package com.app.shop.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

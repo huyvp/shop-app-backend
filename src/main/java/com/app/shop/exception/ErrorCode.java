@@ -48,7 +48,6 @@ public enum ErrorCode {
     // ----------------------------------
     ORDER_3001(3001, HttpStatus.BAD_REQUEST, "Order existed"),
     ORDER_3002(3002, HttpStatus.BAD_REQUEST, "Order not found"),
-    ORDER_3003(3003, HttpStatus.BAD_REQUEST, "Shipping date must be at least today"),
     // ----------------------------------
     // Related to FILE
     // ----------------------------------
@@ -74,8 +73,10 @@ public enum ErrorCode {
     VALID_1009(1008, HttpStatus.BAD_REQUEST, "Shipping address is required"),
     VALID_1010(1010, HttpStatus.BAD_REQUEST, "Payment method is required"),
     VALID_1011(1011, HttpStatus.BAD_REQUEST, "Number of product must be greater than 1"),
+    VALID_1012(1012, HttpStatus.BAD_REQUEST, "Shipping date must be at least today"),
+    VALID_1013(1013, HttpStatus.BAD_REQUEST, "Shipping address is require"),
 
-    VALID_1012(1012, HttpStatus.BAD_REQUEST, "Age must be at least {min}"),
+    VALID_1014(1014, HttpStatus.BAD_REQUEST, "Age must be at least {min}"),
     ;
     private int code;
     private HttpStatus httpStatus;

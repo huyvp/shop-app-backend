@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +30,8 @@ public class OrderResponse {
     private String shippingMethod;
     @JsonProperty("shipping_address")
     private String shippingAddress;
+    @JsonProperty("shipping_date")
+    private Date shippingDate;
     @JsonProperty("payment_method")
     private String paymentMethod;
 }
