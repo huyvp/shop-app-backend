@@ -19,22 +19,22 @@ public class RoleController {
     IRoleService roleService;
 
     @PostMapping
-    ResponseEntity<?> create(@RequestBody RoleDTO roleDTO) {
+    ResponseEntity<Object> create(@RequestBody RoleDTO roleDTO) {
         return ResponseHandler.execute(
                 roleService.create(roleDTO)
         );
     }
 
     @GetMapping
-    ResponseEntity<?> getAll() {
+    ResponseEntity<Object> getAll() {
         return ResponseHandler.execute(
                 roleService.getAll()
         );
     }
 
-    @DeleteMapping("/{role}")
-    ResponseEntity<?> delete(@PathVariable String role) {
-        roleService.delete(role);
+    @DeleteMapping("/{name}")
+    ResponseEntity<Object> delete(@PathVariable String name) {
+        roleService.delete(name);
         return ResponseHandler.execute(null);
     }
 }

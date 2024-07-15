@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 
 public class ResponseHandler {
-    public static ResponseEntity<?> execute(Object result, int... totals) {
-        AppResponse<?> appResponse = AppResponse.builder()
+    public static ResponseEntity<Object> execute(Object result, int... totals) {
+        AppResponse<Object> appResponse = AppResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .code(2000)
                 .message("success")

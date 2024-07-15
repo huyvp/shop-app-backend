@@ -32,9 +32,9 @@ public class PermissionController {
         );
     }
 
-    @DeleteMapping("/{permission}")
-    ResponseEntity<?> delete(@PathVariable String permission) {
-        permissionService.delete(permission);
+    @DeleteMapping("/{name}")
+    ResponseEntity<?> delete(@PathVariable String name) {
+        permissionService.delete(name);
         return ResponseHandler.execute(null);
     }
 }

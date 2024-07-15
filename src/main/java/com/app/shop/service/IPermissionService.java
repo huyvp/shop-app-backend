@@ -10,5 +10,5 @@ public interface IPermissionService {
 
     List<PermissionResponse> getAll();
 
-    void delete(String permission);
+    void delete(String name);
 }

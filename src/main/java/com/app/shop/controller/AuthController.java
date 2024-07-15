@@ -1,6 +1,5 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.user.UserDTO;
 import com.app.shop.dto.user.UserLoginDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
@@ -21,27 +20,27 @@ public class AuthController {
     IUserService userService;
 
     @PostMapping(value = "login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userDTO) {
+    public ResponseEntity<Object> login(@Valid @RequestBody UserLoginDTO userDTO) {
         return ResponseHandler.execute(
                 userService.login(userDTO)
         );
     }
 
     @PostMapping("introspect")
-    public ResponseEntity<?> introspect(@RequestParam("token") String token) {
+    public ResponseEntity<Object> introspect(@RequestParam("token") String token) {
         return ResponseHandler.execute(
                 userService.introspect(token)
         );
     }
 
     @PostMapping(value = "logout")
-    public ResponseEntity<?> logout(@RequestParam("token") String token) {
+    public ResponseEntity<Object> logout(@RequestParam("token") String token) {
         userService.logout(token);
         return ResponseHandler.execute(null);
     }
 
     @PostMapping(value = "refresh")
-    public ResponseEntity<?> refresh(@RequestParam("token") String token) {
+    public ResponseEntity<Object> refresh(@RequestParam("token") String token) {
         return ResponseHandler.execute(
                 userService.refreshToken(token)
         );

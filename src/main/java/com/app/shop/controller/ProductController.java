@@ -28,14 +28,14 @@ public class ProductController {
     IProductService productService;
 
     @PostMapping("")
-    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO) throws IOException {
+    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDTO productDTO) throws IOException {
         return ResponseHandler.execute(
                 productService.createProduct(productDTO)
         );
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProduct(@RequestParam("page") int page,
+    public ResponseEntity<Object> getAllProduct(@RequestParam("page") int page,
                                            @RequestParam("limit") int limit) {
         Page<ProductResponse> productPage = productService.getAllProducts(
                 PageRequest.of(page, limit, Sort.by("CreatedAt").ascending())
@@ -46,26 +46,26 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable int id) {
+    public ResponseEntity<Object> getProductById(@PathVariable int id) {
         return ResponseHandler.execute(
                 productService.getProductById(id)
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<Object> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
         productService.updateProduct(id, productDTO);
         return ResponseHandler.execute(null);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable int id) {
+    public ResponseEntity<Object> deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);
         return ResponseHandler.execute(null);
     }
 
     @PostMapping(value = "/uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
+    public ResponseEntity<Object> uploadImage(@PathVariable @Valid Long id, @ModelAttribute("files") List<MultipartFile> files) throws IOException {
         return ResponseHandler.execute(
                 productService.uploadImage(id, files)
         );

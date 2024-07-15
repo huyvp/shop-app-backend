@@ -1,4 +1,4 @@
-package com.app.shop.dto;
+package com.app.shop.dto.order;
 
 import com.app.shop.validator.DateAfterNow;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,7 +37,7 @@ public class OrderDTO {
     @NotBlank(message = "VALID_1009")
     String shippingAddress;
     @JsonProperty("shipping_date")
-    @DateAfterNow(message = "ORDER_3003")
+    @DateAfterNow(message = "VALID_1012")
     Date shippingDate;
     @JsonProperty("payment_method")
     @NotBlank(message = "VALID_1010")

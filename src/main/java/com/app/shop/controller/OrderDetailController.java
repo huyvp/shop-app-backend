@@ -1,6 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.OrderDetailDTO;
+import com.app.shop.dto.order.OrderDetailDTO;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

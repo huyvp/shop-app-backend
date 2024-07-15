@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 
-@Table(name = "InvalidatedTokens")
+@Table(name = "invalidated_tokens")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor

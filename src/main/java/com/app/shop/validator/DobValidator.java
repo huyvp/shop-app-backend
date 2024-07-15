@@ -21,7 +21,7 @@ public class DobValidator implements ConstraintValidator<DateOfBirth, Date> {
     @Override
     public boolean isValid(Date value, ConstraintValidatorContext context) {
         if (Objects.isNull(value)) {
-            return true;
+            return false;
         }
 
         LocalDate dob = value.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

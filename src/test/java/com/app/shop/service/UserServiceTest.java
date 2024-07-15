@@ -23,15 +23,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
-public class UserServiceTest {
+class UserServiceTest {
     @Autowired
     private UserService userService;
 
@@ -119,7 +118,7 @@ public class UserServiceTest {
         when(userMapper.toUserFromUserDTO(userDTO)).thenReturn(user);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         // WHEN
-        var response = userService.createUser(userDTO);
+        userService.createUser(userDTO);
         // THEN
         assertEquals("encodedPassword", user.getPassword());
 
@@ -136,14 +135,15 @@ public class UserServiceTest {
         when(userMapper.toUserFromUserDTO(userDTO)).thenReturn(user);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         // WHEN
-        var response = userService.createUser(userDTO);
+        userService.createUser(userDTO);
         // THEN
         assertEquals("password", user.getPassword());
 
     }
+
     @Test
     @WithMockUser(username = "012345678")
-    void getMyInfo_valid_success(){
+    void getMyInfo_valid_success() {
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.of(user));
         when(userMapper.toUserResponse(user)).thenReturn(userResponse);
 
@@ -152,13 +152,14 @@ public class UserServiceTest {
         assertEquals("012345678", response.getPhoneNumber());
 
     }
+
     @Test
     @WithMockUser(username = "012345678")
-    void getMyInfo_notFoundUser_fail(){
+    void getMyInfo_notFoundUser_fail() {
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.empty());
 
         var exception = assertThrows(ShopAppException.class, () -> userService.getMyInfo());
 
-        assertEquals(exception.getErrorCode().getCode(), 3002);
+        assertEquals(3002, exception.getErrorCode().getCode());
     }
 }

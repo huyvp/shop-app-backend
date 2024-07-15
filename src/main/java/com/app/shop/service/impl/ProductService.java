@@ -1,13 +1,12 @@
 package com.app.shop.service.impl;
 
 import com.app.shop.dto.product.ProductDTO;
-import com.app.shop.exception.ErrorCode;
-import com.app.shop.exception.ShopAppException;
-import com.app.shop.mapper.ProductMapper;
-import com.app.shop.mapper.UserMapper;
 import com.app.shop.entity.Category;
 import com.app.shop.entity.Product;
 import com.app.shop.entity.ProductImage;
+import com.app.shop.exception.ErrorCode;
+import com.app.shop.exception.ShopAppException;
+import com.app.shop.mapper.ProductMapper;
 import com.app.shop.repo.CategoryRepo;
 import com.app.shop.repo.ProductImageRepo;
 import com.app.shop.repo.ProductRepo;
@@ -44,10 +43,9 @@ public class ProductService implements IProductService {
     CategoryRepo categoryRepo;
     ProductImageRepo productImageRepo;
     ProductMapper productMapper;
-    private final UserMapper userMapper;
 
     @Override
-    public ProductResponse createProduct(ProductDTO productDTO) throws IOException {
+    public ProductResponse createProduct(ProductDTO productDTO) {
         Category category = categoryRepo.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         Product product = productMapper.toProduct(productDTO);
@@ -89,10 +87,10 @@ public class ProductService implements IProductService {
 
     @Override
     public void updateProduct(long id, ProductDTO productDTO) {
-        productRepo.findById(id)
+        Product product = productRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
         Product newProduct = productMapper.toProduct(productDTO);
-        newProduct.setId(id);
+        newProduct.setId(product.getId());
         Category category = categoryRepo.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         newProduct.setCategory(category);

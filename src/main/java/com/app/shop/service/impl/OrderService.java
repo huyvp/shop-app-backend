@@ -1,6 +1,6 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.OrderDTO;
+import com.app.shop.dto.order.OrderDTO;
 import com.app.shop.entity.Order;
 import com.app.shop.entity.User;
 import com.app.shop.exception.ErrorCode;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import static com.app.shop.constant.Constants.ORDER_STATUS.PENDING;
 
@@ -58,9 +57,9 @@ public class OrderService implements IOrderService {
 
     @Override
     public Page<OrderResponse> getOrderByUserId(long userId, PageRequest pageRequest) {
-        userRepo.findById(userId)
+        User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
-        return orderRepo.findByUserId(userId, pageRequest)
+        return orderRepo.findByUser(user, pageRequest)
                 .map(orderMapper::toOrderResponse);
     }
 

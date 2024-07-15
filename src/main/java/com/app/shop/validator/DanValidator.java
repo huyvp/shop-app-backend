@@ -16,7 +16,7 @@ public class DanValidator implements ConstraintValidator<DateAfterNow, Date> {
     @Override
     public boolean isValid(Date value, ConstraintValidatorContext constraintValidatorContext) {
         if (Objects.isNull(value)) {
-            return true;
+            return false;
         }
         return value.after(new Date());
     }

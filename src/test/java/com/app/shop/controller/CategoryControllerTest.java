@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @Slf4j
 @AutoConfigureMockMvc
-public class CategoryControllerTest {
+class CategoryControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean

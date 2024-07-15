@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class UserController {
     IUserService userService;
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDTO userDTO) {
         log.info("====================== Controller create user =============================");
         return ResponseHandler.execute(
                 userService.createUser(userDTO)
@@ -35,26 +34,22 @@ public class UserController {
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable int id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return ResponseHandler.execute(null);
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id,
-                                        @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+    public ResponseEntity<Object> updateUser(@PathVariable int id,
+                                             @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
         return ResponseHandler.execute(
                 userService.updateUser(id, userUpdateDTO)
         );
     }
 
     @GetMapping()
-    public ResponseEntity<?> getAllUser(@RequestParam("page") int page,
-                                        @RequestParam("limit") int limit) {
-        var context = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: {}", context.getName());
-        context.getAuthorities().forEach(grantedAuthority ->
-                log.info(grantedAuthority.getAuthority()));
+    public ResponseEntity<Object> getAllUser(@RequestParam("page") int page,
+                                             @RequestParam("limit") int limit) {
         List<UserResponse> users = userService.getAllUser(
                 PageRequest.of(page, limit, Sort.by("id").ascending())
         );
@@ -62,14 +57,14 @@ public class UserController {
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<?> getUserById(@PathVariable int id) {
+    public ResponseEntity<Object> getUserById(@PathVariable int id) {
         return ResponseHandler.execute(
                 userService.getUserById(id)
         );
     }
 
     @GetMapping(value = "/myInfo")
-    public ResponseEntity<?> getMyInfo() {
+    public ResponseEntity<Object> getMyInfo() {
         return ResponseHandler.execute(
                 userService.getMyInfo()
         );

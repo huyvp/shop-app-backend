@@ -26,7 +26,7 @@ import java.util.Date;
 @Slf4j
 @AutoConfigureMockMvc
 @TestPropertySource("/test.properties")
-public class UserControllerTest {
+class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean

@@ -48,6 +48,10 @@ public enum ErrorCode {
     // ----------------------------------
     ORDER_3001(3001, HttpStatus.BAD_REQUEST, "Order existed"),
     ORDER_3002(3002, HttpStatus.BAD_REQUEST, "Order not found"),
+    // Related to ORDER
+    // ----------------------------------
+    ORDER_DETAIL_3001(3001, HttpStatus.BAD_REQUEST, "Order detail existed"),
+    ORDER_DETAIL_3002(3002, HttpStatus.BAD_REQUEST, "Order detail not found"),
     // ----------------------------------
     // Related to FILE
     // ----------------------------------

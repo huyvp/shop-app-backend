@@ -1,11 +1,11 @@
 package com.app.shop.service.impl;
 
 import com.app.shop.dto.RoleDTO;
+import com.app.shop.entity.Permission;
+import com.app.shop.entity.Role;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.RoleMapper;
-import com.app.shop.entity.Permission;
-import com.app.shop.entity.Role;
 import com.app.shop.repo.PermissionRepo;
 import com.app.shop.repo.RoleRepo;
 import com.app.shop.response.RoleResponse;
@@ -47,9 +47,9 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public void delete(String role) {
-        roleRepo.findById(role)
+    public void delete(String name) {
+        Role roleToDelete = roleRepo.findById(name)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ROLE_3002));
-        roleRepo.deleteById(role);
+        roleRepo.delete(roleToDelete);
     }
 }

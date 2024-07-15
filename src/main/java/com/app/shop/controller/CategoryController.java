@@ -18,35 +18,35 @@ public class CategoryController {
     ICategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<?> createCategories(@RequestBody @Valid CategoryDTO categoryDTO) {
+    public ResponseEntity<Object> createCategories(@RequestBody @Valid CategoryDTO categoryDTO) {
         return ResponseHandler.execute(
                 categoryService.createCategory(categoryDTO)
         );
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCategories() {
+    public ResponseEntity<Object> getAllCategories() {
         return ResponseHandler.execute(
                 categoryService.getALlCategories()
         );
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getCategoriesById(@PathVariable int id) {
+    public ResponseEntity<Object> getCategoriesById(@PathVariable int id) {
         return ResponseHandler.execute(
                 categoryService.getCategoryById(id)
         );
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateCategories(@Valid @PathVariable int id,
+    public ResponseEntity<Object> updateCategories(@Valid @PathVariable int id,
                                               @RequestBody @Valid CategoryDTO categoryDTO) {
         categoryService.updateCategory(id, categoryDTO);
         return ResponseHandler.execute(null);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteCategories(@Valid @PathVariable int id) {
+    public ResponseEntity<Object> deleteCategories(@Valid @PathVariable int id) {
         categoryService.deleteCategory(id);
         return ResponseHandler.execute(null);
     }
