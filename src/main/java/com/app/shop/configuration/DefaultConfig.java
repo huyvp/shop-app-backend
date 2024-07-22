@@ -25,7 +25,7 @@ import static com.app.shop.constant.Constants.PreDefineRole.ROLE_USER;
 public class DefaultConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10);
     }
 
     @Bean

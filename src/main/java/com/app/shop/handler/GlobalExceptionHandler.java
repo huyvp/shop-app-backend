@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,8 +22,8 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ResponseEntity<AppResponse<?>> handleRestException(Exception ex) {
-        AppResponse<?> appResponse = AppResponse.builder()
+    ResponseEntity<AppResponse<Object>> handleRestException(Exception ex) {
+        AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ErrorCode.UNCATEGORIZED.getCode())
                 .status(HttpStatus.BAD_REQUEST)
                 .message(ex.getMessage())
@@ -33,8 +32,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = ShopAppException.class)
-    ResponseEntity<AppResponse<?>> handleShopException(ShopAppException ex) {
-        AppResponse<?> appResponse = AppResponse.builder()
+    ResponseEntity<AppResponse<Object>> handleShopException(ShopAppException ex) {
+        AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ex.getErrorCode().getCode())
                 .status(ex.getErrorCode().getHttpStatus())
                 .message(ex.getErrorCode().getMessage())
@@ -46,8 +45,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    ResponseEntity<AppResponse<?>> handleAccessDeniedException() {
-        AppResponse<?> appResponse = AppResponse.builder()
+    ResponseEntity<AppResponse<Object>> handleAccessDeniedException() {
+        AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ErrorCode.AUTH_4000.getCode())
                 .status(ErrorCode.AUTH_4000.getHttpStatus())
                 .message(ErrorCode.AUTH_4000.getMessage())
@@ -59,7 +58,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ResponseEntity<AppResponse<?>> handleValidationException(MethodArgumentNotValidException ex) {
+    ResponseEntity<AppResponse<Object>> handleValidationException(MethodArgumentNotValidException ex) {
         String enumKey = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         ErrorCode errorCode = ErrorCode.valueOf(enumKey);
 
@@ -70,7 +69,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
         log.info(attributes.toString());
 
-        AppResponse<?> appResponse = AppResponse.builder()
+        AppResponse<Object> appResponse = AppResponse.builder()
                 .code(errorCode.getCode())
                 .status(errorCode.getHttpStatus())
                 .message(mapAttributes(errorCode.getMessage(), attributes))
@@ -84,7 +83,7 @@ public class GlobalExceptionHandler {
         if (Objects.nonNull(attributes)) {
             String min = String.valueOf(attributes.get("min"));
             return msg.replace("{min}", min);
-        }else {
+        } else {
             return msg;
         }
     }

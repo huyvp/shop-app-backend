@@ -19,21 +19,21 @@ public class PermissionController {
     IPermissionService permissionService;
 
     @PostMapping
-    ResponseEntity<?> create(@RequestBody PermissionDTO permissionDTO) {
+    ResponseEntity<Object> create(@RequestBody PermissionDTO permissionDTO) {
         return ResponseHandler.execute(
                 permissionService.create(permissionDTO)
         );
     }
 
     @GetMapping
-    ResponseEntity<?> getAll() {
+    ResponseEntity<Object> getAll() {
         return ResponseHandler.execute(
                 permissionService.getAll()
         );
     }
 
     @DeleteMapping("/{name}")
-    ResponseEntity<?> delete(@PathVariable String name) {
+    ResponseEntity<Object> delete(@PathVariable String name) {
         permissionService.delete(name);
         return ResponseHandler.execute(null);
     }
