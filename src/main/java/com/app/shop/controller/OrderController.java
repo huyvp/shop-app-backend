@@ -32,7 +32,7 @@ public class OrderController {
 
     @PutMapping("{id}")
     public ResponseEntity<Object> updateOrder(@Valid @PathVariable int id,
-                                         @Valid @RequestBody OrderDTO orderDTO) {
+                                              @Valid @RequestBody OrderDTO orderDTO) {
         orderService.updateOrder(id, orderDTO);
         return ResponseHandler.execute(null);
     }
@@ -43,7 +43,14 @@ public class OrderController {
         return ResponseHandler.execute(null);
     }
 
-    @GetMapping("/{user_id}")
+    @GetMapping("{id}")
+    public ResponseEntity<Object> getOrderById(@Valid @PathVariable("id") Long id) {
+        return ResponseHandler.execute(
+                orderService.getOrderById(id)
+        );
+    }
+
+    @GetMapping("user/{user_id}")
     public ResponseEntity<Object> getOrderByUserId(
             @Valid @PathVariable("user_id") Long userId,
             @RequestParam("limit") int limit,

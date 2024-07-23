@@ -1,5 +1,6 @@
 package com.app.shop.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,11 +9,13 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import static com.app.shop.constant.Constants.Pattern.DATE;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class OrderResponse {
-    private long id;
+    private Long id;
     @JsonProperty("user_id")
     private long userId;
     @JsonProperty("fullname")
@@ -23,6 +26,7 @@ public class OrderResponse {
     private String address;
     private String note;
     @JsonProperty("order_date")
+    @JsonFormat(pattern = DATE)
     private LocalDateTime orderDate;
     @JsonProperty("total_money")
     private float totalMoney;

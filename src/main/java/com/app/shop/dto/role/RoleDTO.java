@@ -1,4 +1,4 @@
-package com.app.shop.dto;
+package com.app.shop.dto.role;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

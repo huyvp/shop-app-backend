@@ -1,6 +1,7 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.RoleDTO;
+import com.app.shop.dto.role.RoleDTO;
+import com.app.shop.dto.role.RoleUpdateDTO;
 import com.app.shop.entity.Permission;
 import com.app.shop.entity.Role;
 import com.app.shop.exception.ErrorCode;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,20 @@ public class RoleService implements IRoleService {
         return roleRepo.findAll().stream()
                 .map(roleMapper::toRoleResponse)
                 .toList();
+    }
+
+    @Override
+    public RoleResponse update(String role, RoleUpdateDTO roleUpdateDTO) {
+        Role roleToUpdate = roleRepo.findById(role)
+                .orElseThrow(() -> new ShopAppException(ErrorCode.ROLE_3002));
+        Set<Permission> permissions = roleToUpdate.getPermissions();
+        for (Permission permission : permissions) {
+            if (permissionRepo.findById(permission.getName()).isPresent())
+                throw new ShopAppException(ErrorCode.PERMISSION_3002);
+        }
+        roleMapper.updateRole(roleUpdateDTO, roleToUpdate);
+        Role updatedRole = roleRepo.save(roleToUpdate);
+        return roleMapper.toRoleResponse(updatedRole);
     }
 
     @Override

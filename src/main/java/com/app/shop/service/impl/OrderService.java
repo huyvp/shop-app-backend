@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,8 +33,11 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderResponse createOrder(OrderDTO orderDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepo.findById(orderDTO.getUserId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
+        if (!user.getPhoneNumber().equals(authentication.getName()))
+            throw new ShopAppException(ErrorCode.AUTH_4000);
         Order order = orderMapper.toOrder(orderDTO);
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
