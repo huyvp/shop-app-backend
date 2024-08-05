@@ -1,4 +1,3 @@
 jwt:
-  signerKey: SpringBootTestsdfhsdfgsr4gsfgsregsfgsfdghjhfjhkjkjhfwqkh
-  valid-duration: 5
+  valid-duration: 7200
   refreshable-duration: 120

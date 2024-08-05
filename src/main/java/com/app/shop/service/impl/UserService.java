@@ -130,7 +130,6 @@ public class UserService implements IUserService {
 
     @Override
     public String login(UserLoginDTO userLoginDTO) {
-        log.info("SIGNER_KEY: {}", SIGNER_KEY);
         if (userLoginDTO.getPassword() == null || userLoginDTO.getPhoneNumber() == null) {
             throw new ShopAppException(ErrorCode.AUTH_4002);
         }

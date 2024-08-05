@@ -21,8 +21,7 @@ public class User extends BaseEntity {
     Long id;
     @Column(name = "fullname", length = 100)
     String fullName;
-    @Column(name = "phone_number", length = 10, nullable = false,
-            unique = true, columnDefinition = "varchar(255)")
+    @Column(name = "phone_number", length = 10, nullable = false)
     String phoneNumber;
     @Column(name = "address", length = 200, nullable = false)
     String address;

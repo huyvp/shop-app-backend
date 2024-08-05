@@ -15,6 +15,7 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 @AllArgsConstructor
 @Builder
 public class OrderResponse {
+    @JsonProperty("id")
     private Long id;
     @JsonProperty("user_id")
     private long userId;

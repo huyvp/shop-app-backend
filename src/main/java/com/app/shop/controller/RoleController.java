@@ -1,7 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.role.RoleDTO;
-import com.app.shop.dto.role.RoleUpdateDTO;
+import com.app.shop.dto.RoleDTO;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IRoleService;
 import lombok.AccessLevel;
@@ -30,13 +29,6 @@ public class RoleController {
     ResponseEntity<Object> getAll() {
         return ResponseHandler.execute(
                 roleService.getAll()
-        );
-    }
-
-    @PatchMapping("{role}")
-    ResponseEntity<Object> update(@PathVariable String role, @RequestBody RoleUpdateDTO roleUpdateDTO) {
-        return ResponseHandler.execute(
-                roleService.update(role, roleUpdateDTO)
         );
     }
 

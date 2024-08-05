@@ -6,9 +6,9 @@ spring:
       max-file-size: 10MB
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: hh1122334455
-    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${DBMS_USERNAME:postgres}
+    password: ${DBMS_PASSWORD:123456}
+    url: ${DBMS_URL:jdbc:postgresql://localhost:5432/postgres}
   jpa:
     show-sql: false
     hibernate:
@@ -21,5 +21,5 @@ api:
   prefix: api/v1
 jwt:
   signerKey: SpringBootTrainingsdfhsdfgsr4gsfgsregsfgsfdg#$%S%G
-  valid-duration: 5
+  valid-duration: 3600
   refreshable-duration: 120

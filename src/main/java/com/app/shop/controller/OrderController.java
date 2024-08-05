@@ -57,7 +57,7 @@ public class OrderController {
             @RequestParam("page") int page) {
         Page<OrderResponse> responsePage = orderService.getOrderByUserId(
                 userId,
-                PageRequest.of(page, limit, Sort.by("order_date").ascending())
+                PageRequest.of(page, limit, Sort.by("orderDate").ascending())
         );
         int totalPages = responsePage.getTotalPages();
         List<OrderResponse> orders = responsePage.getContent();
