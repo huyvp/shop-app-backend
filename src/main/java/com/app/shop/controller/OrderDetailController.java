@@ -1,10 +1,13 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.order.OrderDetailDTO;
+import com.app.shop.dto.orderDetail.OrderDetailDTO;
+import com.app.shop.handler.ResponseHandler;
+import com.app.shop.service.impl.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,28 +15,40 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderDetailController {
+    OrderDetailService orderDetailService;
+
     @PostMapping
-    public String createOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
-        return "Create order detail";
+    public ResponseEntity<Object> createOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
+        return ResponseHandler.execute(
+                orderDetailService.create(orderDetailDTO)
+        );
     }
 
     @GetMapping("/{id}")
-    public String getOrderDetail(@Valid @PathVariable("id") Long id) {
-        return "Get order detail with id";
+    public ResponseEntity<Object> getOrderDetail(@Valid @PathVariable("id") int id) {
+        return ResponseHandler.execute(
+                orderDetailService.getById(id)
+        );
     }
 
     @GetMapping("/order/{orderId}")
-    public String getOrderDetails(@Valid @PathVariable("orderId") Long orderId) {
-        return "Get list order details of a order";
+    public ResponseEntity<Object> getOrderDetailByOrderId(@Valid @PathVariable("orderId") Long orderId) {
+        return ResponseHandler.execute(
+                orderDetailService.getByOrderId(orderId)
+        );
     }
 
     @PutMapping("/{id}")
-    public String updateOrderDetail(@Valid @PathVariable("id") Long id, @RequestBody OrderDetailDTO orderDetailDTO) {
-        return "Update order detail";
+    public ResponseEntity<Object> updateOrderDetail(@Valid @PathVariable("id") Long id,
+                                                    @RequestBody OrderDetailDTO orderDetailDTO) {
+        return ResponseHandler.execute(
+                orderDetailService.update(id, orderDetailDTO)
+        );
     }
 
     @DeleteMapping("/{id}")
-    public String deleteOrderDetail(@Valid @PathVariable("id") Long id) {
-        return "Delete order detail";
+    public ResponseEntity<Object> deleteOrderDetail(@Valid @PathVariable("id") Long id) {
+        orderDetailService.delete(id);
+        return ResponseHandler.execute();
     }
 }

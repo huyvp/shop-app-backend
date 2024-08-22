@@ -35,6 +35,6 @@ public class PermissionController {
     @DeleteMapping("/{name}")
     ResponseEntity<Object> delete(@PathVariable String name) {
         permissionService.delete(name);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 }

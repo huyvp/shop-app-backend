@@ -1,9 +1,11 @@
 package com.app.shop.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -13,39 +15,40 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    User user;
     @Column(name = "fullname", length = 100)
-    private String fullName;
+    String fullName;
     @Column(name = "email", length = 100)
-    private String email;
+    String email;
     @Column(name = "phone_number", length = 100, nullable = false)
-    private String phoneNumber;
+    String phoneNumber;
     @Column(name = "address", length = 100)
-    private String address;
+    String address;
     @Column(name = "note", length = 100)
-    private String note;
+    String note;
     @Column(name = "order_date")
-    private LocalDateTime orderDate;
+    LocalDateTime orderDate;
     @Column(name = "status")
-    private String status;
+    String status;
     @Column(name = "total_money")
-    private Float totalMoney;
+    Float totalMoney;
     @Column(name = "shipping_method")
-    private String shippingMethod;
+    String shippingMethod;
     @Column(name = "shipping_address")
-    private String shippingAddress;
+    String shippingAddress;
     @Column(name = "shipping_date")
-    private Date shippingDate;
+    Date shippingDate;
     @Column(name = "tracking_number")
-    private String trackingNumber;
+    String trackingNumber;
     @Column(name = "payment_method")
-    private String paymentMethod;
+    String paymentMethod;
     @Column(name = "active")
-    private Boolean active;
+    Boolean active;
 }

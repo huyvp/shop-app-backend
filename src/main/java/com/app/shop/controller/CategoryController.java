@@ -27,7 +27,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<Object> getAllCategories() {
         return ResponseHandler.execute(
-                categoryService.getALlCategories()
+                categoryService.getAllCategories()
         );
     }
 
@@ -42,12 +42,12 @@ public class CategoryController {
     public ResponseEntity<Object> updateCategories(@Valid @PathVariable int id,
                                               @RequestBody @Valid CategoryDTO categoryDTO) {
         categoryService.updateCategory(id, categoryDTO);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deleteCategories(@Valid @PathVariable int id) {
         categoryService.deleteCategory(id);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 }

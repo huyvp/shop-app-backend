@@ -17,8 +17,8 @@ import static com.app.shop.constant.Constants.Pattern.DATE;
 public class OrderResponse {
     @JsonProperty("id")
     private Long id;
-    @JsonProperty("user_id")
-    private long userId;
+    @JsonProperty("user")
+    private UserResponse userResponse;
     @JsonProperty("fullname")
     private String fullName;
     private String email;
@@ -36,6 +36,7 @@ public class OrderResponse {
     @JsonProperty("shipping_address")
     private String shippingAddress;
     @JsonProperty("shipping_date")
+    @JsonFormat(pattern = DATE)
     private Date shippingDate;
     @JsonProperty("payment_method")
     private String paymentMethod;

@@ -34,13 +34,13 @@ public class OrderController {
     public ResponseEntity<Object> updateOrder(@Valid @PathVariable int id,
                                               @Valid @RequestBody OrderDTO orderDTO) {
         orderService.updateOrder(id, orderDTO);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deleteOrder(@Valid @PathVariable int id) {
         orderService.deleteOrder(id);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 
     @GetMapping("{id}")
@@ -50,13 +50,11 @@ public class OrderController {
         );
     }
 
-    @GetMapping("user/{user_id}")
-    public ResponseEntity<Object> getOrderByUserId(
-            @Valid @PathVariable("user_id") Long userId,
+    @GetMapping(value = "/my_orders")
+    public ResponseEntity<Object> getMyOrders(
             @RequestParam("limit") int limit,
             @RequestParam("page") int page) {
-        Page<OrderResponse> responsePage = orderService.getOrderByUserId(
-                userId,
+        Page<OrderResponse> responsePage = orderService.getMyOrder(
                 PageRequest.of(page, limit, Sort.by("orderDate").ascending())
         );
         int totalPages = responsePage.getTotalPages();

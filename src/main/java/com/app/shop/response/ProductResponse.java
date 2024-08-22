@@ -1,17 +1,21 @@
 package com.app.shop.response;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductResponse extends BaseResponse {
-    private Long id;
-    private String name;
-    private float price;
-    private String thumbnail;
-    private String description;
-    private long categoryId;
+    Long id;
+    String name;
+    float price;
+    String thumbnail;
+    String description;
+    long categoryId;
 }
+
+

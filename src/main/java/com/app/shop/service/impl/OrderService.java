@@ -61,8 +61,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Page<OrderResponse> getOrderByUserId(long userId, PageRequest pageRequest) {
-        User user = userRepo.findById(userId)
+    public Page<OrderResponse> getMyOrder(PageRequest pageRequest) {
+        String userPhone = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepo.findByPhoneNumber(userPhone)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         return orderRepo.findByUser(user, pageRequest)
                 .map(orderMapper::toOrderResponse);
@@ -80,6 +81,7 @@ public class OrderService implements IOrderService {
     public void deleteOrder(long id) {
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ORDER_3002));
+        order.setActive(false);
         orderRepo.delete(order);
     }
 }

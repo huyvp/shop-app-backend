@@ -1,18 +1,18 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.order.OrderDetailDTO;
-import com.app.shop.entity.OrderDetail;
+import com.app.shop.dto.orderDetail.OrderDetailDTO;
+import com.app.shop.response.OrderDetailResponse;
 
 import java.util.List;
 
 public interface IOrderDetailService {
-    OrderDetail create(OrderDetailDTO orderDetailDTO);
+    OrderDetailResponse create(OrderDetailDTO orderDetailDTO);
 
-    OrderDetail update(long id, OrderDetailDTO orderDetailDTO);
+    OrderDetailResponse update(long id, OrderDetailDTO orderDetailDTO);
 
-    OrderDetail getById(long id);
+    OrderDetailResponse getById(long id);
 
-    List<OrderDetail> getAll();
+    List<OrderDetailResponse> getByOrderId(long orderId);
 
     void delete(long id);
 

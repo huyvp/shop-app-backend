@@ -35,6 +35,6 @@ public class RoleController {
     @DeleteMapping("/{name}")
     ResponseEntity<Object> delete(@PathVariable String name) {
         roleService.delete(name);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 }

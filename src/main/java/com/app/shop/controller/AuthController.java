@@ -36,7 +36,7 @@ public class AuthController {
     @PostMapping(value = "logout")
     public ResponseEntity<Object> logout(@RequestParam("token") String token) {
         userService.logout(token);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 
     @PostMapping(value = "refresh")

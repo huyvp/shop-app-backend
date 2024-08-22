@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Phụ kiện\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Name\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -29,9 +29,6 @@
 				{
 					"name": "api/v1/categories",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": "{{URL.PREFIX}}/categories"
@@ -145,15 +142,6 @@
 					"response": []
 				},
 				{
-					"name": "faker",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": "{{URL.PREFIX}}/products/faker"
-					},
-					"response": []
-				},
-				{
 					"name": "api/v1/products/uploads/{id}",
 					"request": {
 						"method": "POST",
@@ -173,24 +161,30 @@
 					"response": []
 				},
 				{
-					"name": "api/v1/products",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+					"name": "faker",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{URL.PREFIX}}/products/faker"
 					},
+					"response": []
+				},
+				{
+					"name": "api/v1/products/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL.PREFIX}}/products/1"
+					},
+					"response": []
+				},
+				{
+					"name": "api/v1/products",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": 2,\r\n    \"fullname\": \"\",\r\n    \"email\": \"\",\r\n    \"phone_number\": \"\",\r\n    \"address\": \"\",\r\n    \"note\": \"\",\r\n    \"total_money\": \"\",\r\n    \"shipping_method\": \"\",\r\n    \"shipping_address\": \"\",\r\n    \"payment_method\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{URL.PREFIX}}/products?page=1&limit=5",
+							"raw": "{{URL.PREFIX}}/products?page=0&limit=5",
 							"host": [
 								"{{URL.PREFIX}}"
 							],
@@ -200,7 +194,7 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "1"
+									"value": "0"
 								},
 								{
 									"key": "limit",
@@ -224,15 +218,6 @@
 							}
 						],
 						"url": "{{URL.PREFIX}}/products/11"
-					},
-					"response": []
-				},
-				{
-					"name": "api/v1/products/{id}",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": "{{URL.PREFIX}}/products/1"
 					},
 					"response": []
 				}
@@ -265,7 +250,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phone_number\": \"0123457\",\r\n    \"password\": \"pass\"\r\n}",
+							"raw": "{\r\n    \"phone_number\": \"01234576\",\r\n    \"password\": \"pass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -387,7 +372,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullname\": \"UserTest2\",\r\n    \"phone_number\": \"01234576\",\r\n    \"address\": \"Address for test\",\r\n    \"password\": \"pass\",\r\n    \"date_of_birth\": \"2000-09-18\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0\r\n}",
+							"raw": "{\r\n    \"fullname\": \"DevName\",\r\n    \"phone_number\": \"01234576\",\r\n    \"address\": \"HaNoi\",\r\n    \"password\": \"pass\",\r\n    \"date_of_birth\": \"2000-09-18\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -405,7 +390,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullname\": \"UserTest1\",\r\n    \"phone_number\": \"0123457\",\r\n    \"address\": \"Address for test\",\r\n    \"date_of_birth\": \"2000-09-19\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0,\r\n    \"roles\": [\r\n        \"STAFF\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"fullname\": \"DevName\",\r\n    \"phone_number\": \"01234576\",\r\n    \"address\": \"Address for test\",\r\n    \"date_of_birth\": \"2000-09-19\",\r\n    \"facebook_account_id\": 0,\r\n    \"google_account_id\": 0,\r\n    \"roles\": [\r\n        \"STAFF\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -489,7 +474,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": 3,\r\n    \"fullname\": \"fullname\",\r\n    \"email\": \"email@samsung.com\",\r\n    \"phone_number\": \"021314\",\r\n    \"address\": \"dwqdwqdwqd\",\r\n    \"note\": \"This is note for test\",\r\n    \"total_money\": 1111,\r\n    \"shipping_method\": \"shipping_method\",\r\n    \"shipping_address\": \"shipping_address\",\r\n    \"shipping_date\": \"2024-08-10\",\r\n    \"payment_method\": \"payment_method\"\r\n}",
+							"raw": "{\r\n    \"user_id\": 1,\r\n    \"fullname\": \"fullname\",\r\n    \"email\": \"email@samsung.com\",\r\n    \"phone_number\": \"021314\",\r\n    \"address\": \"dwqdwqdwqd\",\r\n    \"note\": \"This is note for test\",\r\n    \"total_money\": 1111,\r\n    \"shipping_method\": \"shipping_method\",\r\n    \"shipping_address\": \"shipping_address\",\r\n    \"shipping_date\": \"2024-08-24\",\r\n    \"payment_method\": \"payment_method\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -507,7 +492,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": 2,\r\n    \"fullname\": \"\",\r\n    \"email\": \"\",\r\n    \"phone_number\": \"\",\r\n    \"address\": \"\",\r\n    \"note\": \"\",\r\n    \"total_money\": \"\",\r\n    \"shipping_method\": \"\",\r\n    \"shipping_address\": \"\",\r\n    \"payment_method\": \"\"\r\n}",
+							"raw": "{\r\n    \"user_id\": 2,\r\n    \"fullname\": \"fsdfdsf\",\r\n    \"email\": \"fdsfdsfdsfds\",\r\n    \"phone_number\": \"ffewfewf\",\r\n    \"address\": \"fewfewfewf\",\r\n    \"note\": \"ewfewfewfew\",\r\n    \"total_money\": 500,\r\n    \"shipping_method\": \"33333\",\r\n    \"shipping_address\": \"3333333333\",\r\n    \"payment_method\": \"33333333333333\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -559,16 +544,35 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{URL.PREFIX}}/orders/1"
+						"url": "{{URL.PREFIX}}/orders/7"
 					},
 					"response": []
 				},
 				{
-					"name": "api/v1/orders/user/{userId}",
+					"name": "api/v1/orders/my_orders",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{URL.PREFIX}}/orders/user/1"
+						"url": {
+							"raw": "{{URL.PREFIX}}/orders/my_orders?limit=10&page=0",
+							"host": [
+								"{{URL.PREFIX}}"
+							],
+							"path": [
+								"orders",
+								"my_orders"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -584,7 +588,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"order_id\": 3,\r\n    \"product_id\": 9,\r\n    \"email\":\"aaass\",\r\n    \"price\": 2,\r\n    \"number_of_product\": 0,\r\n    \"total_money\": 122.1,\r\n    \"color\": \"#ff00ff\"\r\n}",
+							"raw": "{\r\n    \"order_id\": 1,\r\n    \"product_id\": 1,\r\n    \"email\":\"aaass\",\r\n    \"price\": 2,\r\n    \"number_of_product\": 3,\r\n    \"total_money\": 122.1,\r\n    \"color\": \"#ff00ff\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -602,7 +606,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"order_id\": 3,\r\n    \"product_id\": 9,\r\n    \"email\":\"aaass\",\r\n    \"price\": 2,\r\n    \"number_of_product\": 2,\r\n    \"total_money\": 122.1,\r\n    \"color\": \"#ff00ff\"\r\n}",
+							"raw": "{\r\n    \"order_id\": 7,\r\n    \"product_id\": 9,\r\n    \"email\":\"aaass\",\r\n    \"price\": 2,\r\n    \"number_of_product\": 2,\r\n    \"total_money\": 122.122,\r\n    \"color\": \"#ff00ff\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -636,7 +640,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{URL.PREFIX}}/order_details/order/2"
+						"url": "{{URL.PREFIX}}/order_details/order/7"
 					},
 					"response": []
 				}

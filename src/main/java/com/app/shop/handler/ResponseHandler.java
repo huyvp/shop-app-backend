@@ -19,4 +19,7 @@ public class ResponseHandler {
         else appResponse.setTotals(null);
         return ResponseEntity.ok(appResponse);
     }
+    public static ResponseEntity<Object> execute() {
+        return execute(null);
+    }
 }

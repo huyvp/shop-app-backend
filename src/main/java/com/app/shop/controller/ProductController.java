@@ -55,13 +55,13 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
         productService.updateProduct(id, productDTO);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);
-        return ResponseHandler.execute(null);
+        return ResponseHandler.execute();
     }
 
     @PostMapping(value = "/uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
