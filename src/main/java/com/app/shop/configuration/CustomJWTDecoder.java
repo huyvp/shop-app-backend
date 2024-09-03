@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Component
 public class CustomJWTDecoder implements JwtDecoder {
-    private final IUserService userService;
+    IUserService userService;
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
     @Value("${jwt.signerKey}")
