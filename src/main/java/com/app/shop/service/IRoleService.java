@@ -1,12 +1,12 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.RoleDTO;
-import com.app.shop.response.RoleResponse;
+import com.app.shop.dto.request.RoleReq;
+import com.app.shop.dto.response.RoleResponse;
 
 import java.util.List;
 
 public interface IRoleService {
-    RoleResponse create(RoleDTO roleDTO);
+    RoleResponse create(RoleReq roleReq);
 
     List<RoleResponse> getAll();
 

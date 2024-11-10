@@ -1,4 +1,4 @@
-package com.app.shop.dto;
+package com.app.shop.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PermissionDTO {
+public class PermissionReq {
     String name;
     String description;
 }

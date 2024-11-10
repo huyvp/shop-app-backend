@@ -1,6 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.CategoryDTO;
+import com.app.shop.dto.request.CategoryReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.ICategoryService;
 import jakarta.validation.Valid;
@@ -18,9 +18,9 @@ public class CategoryController {
     ICategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Object> createCategories(@RequestBody @Valid CategoryDTO categoryDTO) {
+    public ResponseEntity<Object> createCategories(@RequestBody @Valid CategoryReq categoryReq) {
         return ResponseHandler.execute(
-                categoryService.createCategory(categoryDTO)
+                categoryService.createCategory(categoryReq)
         );
     }
 
@@ -40,8 +40,8 @@ public class CategoryController {
 
     @PutMapping("{id}")
     public ResponseEntity<Object> updateCategories(@Valid @PathVariable int id,
-                                              @RequestBody @Valid CategoryDTO categoryDTO) {
-        categoryService.updateCategory(id, categoryDTO);
+                                                   @RequestBody @Valid CategoryReq categoryReq) {
+        categoryService.updateCategory(id, categoryReq);
         return ResponseHandler.execute();
     }
 

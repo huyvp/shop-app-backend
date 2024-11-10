@@ -1,8 +1,9 @@
 package com.app.shop.handler;
 
+import com.app.shop.configuration.Translator;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
-import com.app.shop.response.AppResponse;
+import com.app.shop.dto.response.AppResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,16 +18,17 @@ import java.util.Map;
 import java.util.Objects;
 
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     ResponseEntity<AppResponse<Object>> handleRestException(Exception ex) {
         AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ErrorCode.UNCATEGORIZED.getCode())
                 .status(HttpStatus.BAD_REQUEST)
-                .message(ex.getMessage())
+                .message(Translator.toLocale(ex.getMessage()))
                 .build();
         return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
     }
@@ -36,7 +38,7 @@ public class GlobalExceptionHandler {
         AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ex.getErrorCode().getCode())
                 .status(ex.getErrorCode().getHttpStatus())
-                .message(ex.getErrorCode().getMessage())
+                .message(Translator.toLocale(ex.getErrorCode().getMessage()))
                 .build();
         return ResponseEntity
                 .status(ex.getErrorCode().getHttpStatus())
@@ -49,7 +51,7 @@ public class GlobalExceptionHandler {
         AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ErrorCode.AUTH_4000.getCode())
                 .status(ErrorCode.AUTH_4000.getHttpStatus())
-                .message(ErrorCode.AUTH_4000.getMessage())
+                .message(Translator.toLocale(ErrorCode.AUTH_4000.getMessage()))
                 .build();
         return ResponseEntity
                 .status(ErrorCode.AUTH_4000.getHttpStatus())
@@ -72,7 +74,7 @@ public class GlobalExceptionHandler {
         AppResponse<Object> appResponse = AppResponse.builder()
                 .code(errorCode.getCode())
                 .status(errorCode.getHttpStatus())
-                .message(mapAttributes(errorCode.getMessage(), attributes))
+                .message(mapAttributes(Translator.toLocale(errorCode.getMessage()), attributes))
                 .build();
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
@@ -80,6 +82,7 @@ public class GlobalExceptionHandler {
     }
 
     private String mapAttributes(String msg, Map<String, Object> attributes) {
+        log.info(msg);
         if (Objects.nonNull(attributes)) {
             String min = String.valueOf(attributes.get("min"));
             return msg.replace("{min}", min);

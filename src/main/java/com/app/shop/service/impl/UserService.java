@@ -1,8 +1,8 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.user.UserDTO;
-import com.app.shop.dto.user.UserLoginDTO;
-import com.app.shop.dto.user.UserUpdateDTO;
+import com.app.shop.dto.request.user.UserReq;
+import com.app.shop.dto.request.user.UserLoginReq;
+import com.app.shop.dto.request.user.UserUpdateReq;
 import com.app.shop.entity.InvalidatedToken;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
@@ -12,7 +12,7 @@ import com.app.shop.entity.User;
 import com.app.shop.repo.InvalidatedTokenRepo;
 import com.app.shop.repo.RoleRepo;
 import com.app.shop.repo.UserRepo;
-import com.app.shop.response.UserResponse;
+import com.app.shop.dto.response.UserResponse;
 import com.app.shop.service.IUserService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -63,20 +63,20 @@ public class UserService implements IUserService {
 
 
     @Override
-    public UserResponse createUser(UserDTO userDTO) {
-        String phoneNumber = userDTO.getPhoneNumber();
+    public UserResponse createUser(UserReq userReq) {
+        String phoneNumber = userReq.getPhoneNumber();
 
         if (userRepo.findByPhoneNumber(phoneNumber).isPresent())
             throw new ShopAppException(ErrorCode.USER_3001);
 
-        User user = userMapper.toUserFromUserDTO(userDTO);
+        User user = userMapper.toUserFromUserDTO(userReq);
         user.setActive(true);
 
         HashSet<Role> roles = new HashSet<>();
         roleRepo.findById(ROLE_USER).ifPresent(roles::add);
         user.setRoles(roles);
 
-        if (userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0) {
+        if (userReq.getFacebookAccountId() == 0 && userReq.getGoogleAccountId() == 0) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
@@ -85,12 +85,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserResponse updateUser(long id, UserUpdateDTO userUpdateDTO) {
+    public UserResponse updateUser(long id, UserUpdateReq userUpdateReq) {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
-        userMapper.updateUser(user, userUpdateDTO);
+        userMapper.updateUser(user, userUpdateReq);
 
-        List<Role> roles = roleRepo.findAllById(userUpdateDTO.getRoles());
+        List<Role> roles = roleRepo.findAllById(userUpdateReq.getRoles());
         user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepo.save(user));
@@ -129,30 +129,26 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(UserLoginDTO userLoginDTO) {
-        if (userLoginDTO.getPassword() == null || userLoginDTO.getPhoneNumber() == null) {
+    public String login(UserLoginReq userLoginReq) {
+        if (userLoginReq.getPassword() == null || userLoginReq.getPhoneNumber() == null) {
             throw new ShopAppException(ErrorCode.AUTH_4002);
         }
-        User user = userRepo.findByPhoneNumber(userLoginDTO.getPhoneNumber())
+        User user = userRepo.findByPhoneNumber(userLoginReq.getPhoneNumber())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         if (user != null) {
-            if (passwordEncoder.matches(user.getPassword(), userLoginDTO.getPassword())) {
+            if (passwordEncoder.matches(user.getPassword(), userLoginReq.getPassword())) {
                 throw new ShopAppException(ErrorCode.AUTH_4003);
             }
         } else {
             throw new ShopAppException(ErrorCode.AUTH_4003);
         }
-        passwordEncoder.matches(user.getPassword(), userLoginDTO.getPassword());
+        passwordEncoder.matches(user.getPassword(), userLoginReq.getPassword());
         return generateToken(user);
     }
 
     @Override
     public boolean introspect(String token) {
-        try {
-            verifyToken(token, false);
-        } catch (Exception e) {
-            return false;
-        }
+        verifyToken(token, false);
         return true;
     }
 
@@ -207,9 +203,9 @@ public class UserService implements IUserService {
             verified = signedJWT.verify(verifier);
 
             if (!verified && expireTime.after(new Date()))
-                throw new ShopAppException(ErrorCode.AUTH_4001);
+                throw new ShopAppException(ErrorCode.AUTH_4004);
             if (invalidatedTokenRepo.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
-                throw new ShopAppException(ErrorCode.AUTH_4001);
+                throw new ShopAppException(ErrorCode.AUTH_4004);
             return signedJWT;
         } catch (JOSEException | ParseException e) {
             throw new RuntimeException(e);

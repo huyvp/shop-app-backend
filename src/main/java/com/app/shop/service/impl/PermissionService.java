@@ -1,12 +1,12 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.PermissionDTO;
+import com.app.shop.dto.request.PermissionReq;
 import com.app.shop.entity.Permission;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.PermissionMapper;
 import com.app.shop.repo.PermissionRepo;
-import com.app.shop.response.PermissionResponse;
+import com.app.shop.dto.response.PermissionResponse;
 import com.app.shop.service.IPermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,11 @@ public class PermissionService implements IPermissionService {
     PermissionMapper permissionMapper;
 
     @Override
-    public PermissionResponse create(PermissionDTO permissionDTO) {
-        if (permissionRepo.findById(permissionDTO.getName()).isPresent())
+    public PermissionResponse create(PermissionReq permissionReq) {
+        if (permissionRepo.findById(permissionReq.getName()).isPresent())
             throw new ShopAppException(ErrorCode.PERMISSION_3001);
 
-        Permission permission = permissionMapper.toPermission(permissionDTO);
+        Permission permission = permissionMapper.toPermission(permissionReq);
         permission = permissionRepo.save(permission);
 
         return permissionMapper.toPermissionResponse(permission);

@@ -1,13 +1,13 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.user.UserDTO;
+import com.app.shop.dto.request.user.UserReq;
 import com.app.shop.entity.Role;
 import com.app.shop.entity.User;
 import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.UserMapper;
 import com.app.shop.repo.RoleRepo;
 import com.app.shop.repo.UserRepo;
-import com.app.shop.response.UserResponse;
+import com.app.shop.dto.response.UserResponse;
 import com.app.shop.service.impl.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +43,7 @@ class UserServiceTest {
     @MockBean
     private UserMapper userMapper;
 
-    private UserDTO userDTO;
+    private UserReq userReq;
     private User user;
     private UserResponse userResponse;
     private Role role;
@@ -54,7 +54,7 @@ class UserServiceTest {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2000, Calendar.SEPTEMBER, 18);
         Date date = calendar.getTime();
-        userDTO = UserDTO.builder()
+        userReq = UserReq.builder()
                 .fullName("fullName")
                 .phoneNumber("012345678")
                 .password("password")
@@ -88,12 +88,12 @@ class UserServiceTest {
         // GIVEN
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.empty());
         when(roleRepo.findById(any())).thenReturn(Optional.of(role));
-        when(userMapper.toUserFromUserDTO(userDTO)).thenReturn(user);
+        when(userMapper.toUserFromUserDTO(userReq)).thenReturn(user);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         when(userRepo.save(any())).thenReturn(user);
         when(userMapper.toUserResponse(user)).thenReturn(userResponse);
         // WHEN
-        var response = userService.createUser(userDTO);
+        var response = userService.createUser(userReq);
         // THEN
         assertThat(response.getId()).isEqualTo(1);
         assertThat(response.getFullName()).isEqualTo("fullName");
@@ -105,7 +105,7 @@ class UserServiceTest {
         // GIVEN
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.of(user));
         // WHEN
-        ShopAppException exception = assertThrows(ShopAppException.class, () -> userService.createUser(userDTO));
+        ShopAppException exception = assertThrows(ShopAppException.class, () -> userService.createUser(userReq));
         // THEN
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(3001);
     }
@@ -115,10 +115,10 @@ class UserServiceTest {
         // GIVEN
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.empty());
         when(roleRepo.findById(any())).thenReturn(Optional.of(role));
-        when(userMapper.toUserFromUserDTO(userDTO)).thenReturn(user);
+        when(userMapper.toUserFromUserDTO(userReq)).thenReturn(user);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         // WHEN
-        userService.createUser(userDTO);
+        userService.createUser(userReq);
         // THEN
         assertEquals("encodedPassword", user.getPassword());
 
@@ -127,15 +127,15 @@ class UserServiceTest {
     @Test
     void createUser_not_encode_password() {
         // GIVEN
-        userDTO.setFacebookAccountId(1);
-        user.setPassword(userDTO.getPassword());
+        userReq.setFacebookAccountId(1);
+        user.setPassword(userReq.getPassword());
 
         when(userRepo.findByPhoneNumber(anyString())).thenReturn(Optional.empty());
         when(roleRepo.findById(any())).thenReturn(Optional.of(role));
-        when(userMapper.toUserFromUserDTO(userDTO)).thenReturn(user);
+        when(userMapper.toUserFromUserDTO(userReq)).thenReturn(user);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         // WHEN
-        userService.createUser(userDTO);
+        userService.createUser(userReq);
         // THEN
         assertEquals("password", user.getPassword());
 

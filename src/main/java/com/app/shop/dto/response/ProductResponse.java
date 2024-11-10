@@ -1,17 +1,21 @@
-package com.app.shop.dto;
+package com.app.shop.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleDTO {
+public class ProductResponse extends BaseResponse {
+    Long id;
     String name;
+    float price;
+    String thumbnail;
     String description;
-    Set<String> permissions;
+    long categoryId;
 }
+
+

@@ -4,11 +4,6 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: ${DBMS_USERNAME:postgres}
-    password: ${DBMS_PASSWORD:123456}
-    url: ${DBMS_URL:jdbc:postgresql://localhost:5432/postgres}
   jpa:
     show-sql: false
     hibernate:

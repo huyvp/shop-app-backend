@@ -1,6 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.user.UserLoginDTO;
+import com.app.shop.dto.request.user.UserLoginReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class AuthController {
     IUserService userService;
 
     @PostMapping(value = "login")
-    public ResponseEntity<Object> login(@Valid @RequestBody UserLoginDTO userDTO) {
+    public ResponseEntity<Object> login(@Valid @RequestBody UserLoginReq userDTO) {
         return ResponseHandler.execute(
                 userService.login(userDTO)
         );

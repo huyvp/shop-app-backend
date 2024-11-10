@@ -1,18 +1,18 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.CategoryDTO;
+import com.app.shop.dto.request.CategoryReq;
 import com.app.shop.entity.Category;
 
 import java.util.List;
 
 public interface ICategoryService {
-    Category createCategory(CategoryDTO categoryDTO);
+    Category createCategory(CategoryReq categoryReq);
 
     Category getCategoryById(long id);
 
     List<Category> getAllCategories();
 
-    void updateCategory(long id, CategoryDTO categoryDTO);
+    void updateCategory(long id, CategoryReq categoryReq);
 
     void deleteCategory(long id);
 }

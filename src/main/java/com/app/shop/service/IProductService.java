@@ -1,8 +1,8 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.product.ProductDTO;
+import com.app.shop.dto.request.product.ProductReq;
 import com.app.shop.entity.ProductImage;
-import com.app.shop.response.ProductResponse;
+import com.app.shop.dto.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,13 +12,13 @@ import java.util.List;
 
 
 public interface IProductService {
-    ProductResponse createProduct(ProductDTO productDTO) throws IOException;
+    ProductResponse createProduct(ProductReq productReq) throws IOException;
 
     ProductResponse getProductById(long id);
 
     Page<ProductResponse> getAllProducts(PageRequest pageRequest);
 
-    void updateProduct(long id, ProductDTO productDTO);
+    void updateProduct(long id, ProductReq productReq);
 
     void deleteProduct(long id);
 

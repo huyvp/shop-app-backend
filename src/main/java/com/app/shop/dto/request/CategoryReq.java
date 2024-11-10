@@ -1,4 +1,4 @@
-package com.app.shop.dto;
+package com.app.shop.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CategoryDTO {
+public class CategoryReq {
     @NotEmpty(message = "VALID_1005")
     private String name;
 }

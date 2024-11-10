@@ -1,6 +1,6 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.product.ProductDTO;
+import com.app.shop.dto.request.product.ProductReq;
 import com.app.shop.entity.Category;
 import com.app.shop.entity.Product;
 import com.app.shop.entity.ProductImage;
@@ -10,7 +10,7 @@ import com.app.shop.mapper.ProductMapper;
 import com.app.shop.repo.CategoryRepo;
 import com.app.shop.repo.ProductImageRepo;
 import com.app.shop.repo.ProductRepo;
-import com.app.shop.response.ProductResponse;
+import com.app.shop.dto.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -45,10 +45,10 @@ public class ProductService implements IProductService {
     ProductMapper productMapper;
 
     @Override
-    public ProductResponse createProduct(ProductDTO productDTO) {
-        Category category = categoryRepo.findById(productDTO.getCategoryId())
+    public ProductResponse createProduct(ProductReq productReq) {
+        Category category = categoryRepo.findById(productReq.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
-        Product product = productMapper.toProduct(productDTO);
+        Product product = productMapper.toProduct(productReq);
         product.setCategory(category);
         Product productSaved = productRepo.save(product);
         return productMapper.toProductResponse(productSaved);
@@ -86,12 +86,12 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void updateProduct(long id, ProductDTO productDTO) {
+    public void updateProduct(long id, ProductReq productReq) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.PRODUCT_3002));
-        Product newProduct = productMapper.toProduct(productDTO);
+        Product newProduct = productMapper.toProduct(productReq);
         newProduct.setId(product.getId());
-        Category category = categoryRepo.findById(productDTO.getCategoryId())
+        Category category = categoryRepo.findById(productReq.getCategoryId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.CATEGORY_3002));
         newProduct.setCategory(category);
         productRepo.save(newProduct);

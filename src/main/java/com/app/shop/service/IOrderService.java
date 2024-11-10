@@ -1,14 +1,13 @@
 package com.app.shop.service;
 
-import com.app.shop.dto.order.OrderDTO;
-import com.app.shop.response.OrderResponse;
+import com.app.shop.dto.request.order.OrderReq;
+import com.app.shop.dto.response.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public interface IOrderService {
-    OrderResponse createOrder(OrderDTO orderDTO);
+    OrderResponse createOrder(OrderReq orderReq);
 
     OrderResponse getOrderById(long id);
     Page<OrderResponse> getMyOrder(PageRequest pageRequest);
@@ -16,7 +15,7 @@ public interface IOrderService {
     @PreAuthorize("hasAuthority('MODIFY_DATA')")
     Page<OrderResponse> getAllOrder(PageRequest pageRequest);
 
-    void updateOrder(long id, OrderDTO orderDTO);
+    void updateOrder(long id, OrderReq orderReq);
 
     void deleteOrder(long id);
 }

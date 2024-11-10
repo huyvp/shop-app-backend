@@ -1,4 +1,4 @@
-package com.app.shop.dto.order;
+package com.app.shop.dto.request.order;
 
 import com.app.shop.validator.DateAfterNow;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDTO {
+public class OrderUpdateReq {
     @Min(value = 1, message = "VALID_1000")
     @JsonProperty("user_id")
     Long userId;

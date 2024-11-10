@@ -1,7 +1,7 @@
-package com.app.shop.configuration;
+package com.app.shop.jwt;
 
 import com.app.shop.exception.ErrorCode;
-import com.app.shop.response.AppResponse;
+import com.app.shop.dto.response.AppResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletRequest;

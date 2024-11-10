@@ -1,6 +1,6 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.CategoryDTO;
+import com.app.shop.dto.request.CategoryReq;
 import com.app.shop.entity.Category;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.exception.ShopAppException;
@@ -22,9 +22,9 @@ public class CategoryService implements ICategoryService {
     CategoryRepo categoryRepo;
 
     @Override
-    public Category createCategory(CategoryDTO categoryDTO) {
+    public Category createCategory(CategoryReq categoryReq) {
         Category category = Category.builder()
-                .name(categoryDTO.getName())
+                .name(categoryReq.getName())
                 .build();
         return categoryRepo.save(category);
     }
@@ -41,9 +41,9 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public void updateCategory(long id, CategoryDTO categoryDTO) {
+    public void updateCategory(long id, CategoryReq categoryReq) {
         Category existingCategory = getCategoryById(id);
-        existingCategory.setName(categoryDTO.getName());
+        existingCategory.setName(categoryReq.getName());
         categoryRepo.save(existingCategory);
     }
 

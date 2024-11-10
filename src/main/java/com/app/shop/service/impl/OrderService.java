@@ -1,6 +1,6 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.order.OrderDTO;
+import com.app.shop.dto.request.order.OrderReq;
 import com.app.shop.entity.Order;
 import com.app.shop.entity.User;
 import com.app.shop.exception.ErrorCode;
@@ -8,7 +8,7 @@ import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.OrderMapper;
 import com.app.shop.repo.OrderRepo;
 import com.app.shop.repo.UserRepo;
-import com.app.shop.response.OrderResponse;
+import com.app.shop.dto.response.OrderResponse;
 import com.app.shop.service.IOrderService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +32,13 @@ public class OrderService implements IOrderService {
     OrderRepo orderRepo;
 
     @Override
-    public OrderResponse createOrder(OrderDTO orderDTO) {
+    public OrderResponse createOrder(OrderReq orderReq) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findById(orderDTO.getUserId())
+        User user = userRepo.findById(orderReq.getUserId())
                 .orElseThrow(() -> new ShopAppException(ErrorCode.USER_3002));
         if (!user.getPhoneNumber().equals(authentication.getName()))
             throw new ShopAppException(ErrorCode.AUTH_4000);
-        Order order = orderMapper.toOrder(orderDTO);
+        Order order = orderMapper.toOrder(orderReq);
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         order.setActive(true);
@@ -70,10 +70,10 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void updateOrder(long id, OrderDTO orderDTO) {
+    public void updateOrder(long id, OrderReq orderReq) {
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ShopAppException(ErrorCode.ORDER_3002));
-        orderMapper.updateOrder(orderDTO, order);
+        orderMapper.updateOrder(orderReq, order);
         orderRepo.save(order);
     }
 

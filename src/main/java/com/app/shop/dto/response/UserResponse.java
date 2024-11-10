@@ -1,29 +1,29 @@
-package com.app.shop.dto.user;
+package com.app.shop.dto.response;
 
-import com.app.shop.validator.DateOfBirth;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
-@NoArgsConstructor
+import static com.app.shop.constant.Constants.Pattern.DOB;
+
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateDTO {
-    @NotBlank(message = "VALID_1001")
+public class UserResponse {
+    int id;
     @JsonProperty("fullname")
     String fullName;
-    @NotBlank(message = "VALID_1002")
     @JsonProperty("phone_number")
     String phoneNumber;
     String address;
-    @DateOfBirth(min = 20, message = "VALID_1013")
     @JsonProperty("date_of_birth")
+    @JsonFormat(pattern = DOB)
     Date dateOfBirth;
-    List<String> roles;
+    Set<RoleResponse> roles;
 }

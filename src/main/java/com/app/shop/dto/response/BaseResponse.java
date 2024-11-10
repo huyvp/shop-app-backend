@@ -1,4 +1,4 @@
-package com.app.shop.response;
+package com.app.shop.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

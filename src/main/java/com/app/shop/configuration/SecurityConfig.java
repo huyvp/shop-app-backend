@@ -1,5 +1,7 @@
 package com.app.shop.configuration;
 
+import com.app.shop.jwt.JwtDecoderCustom;
+import com.app.shop.jwt.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,11 +25,11 @@ public class SecurityConfig {
     private final String[] ENDPOINTS = {"api/v1/auth/*", "api/v1/users"};
     @Value("${jwt.signerKey}")
     protected String signingKey;
-    private final CustomJWTDecoder customJWTDecoder;
+    private final JwtDecoderCustom jwtDecoderCustom;
 
     @Autowired
-    public SecurityConfig(CustomJWTDecoder customJWTDecoder) {
-        this.customJWTDecoder = customJWTDecoder;
+    public SecurityConfig(JwtDecoderCustom jwtDecoderCustom) {
+        this.jwtDecoderCustom = jwtDecoderCustom;
     }
 
     @Bean
@@ -37,10 +39,13 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
 
-        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(
-                jwtConfigurer -> jwtConfigurer.decoder(customJWTDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
-        ).authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(
+                        jwtConfigurer -> jwtConfigurer
+                                .decoder(jwtDecoderCustom)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                )
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();

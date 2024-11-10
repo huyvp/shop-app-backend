@@ -1,6 +1,6 @@
 package com.app.shop.handler;
 
-import com.app.shop.response.AppResponse;
+import com.app.shop.dto.response.AppResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

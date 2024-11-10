@@ -1,7 +1,5 @@
-package com.app.shop.configuration;
+package com.app.shop.jwt;
 
-import com.app.shop.exception.ErrorCode;
-import com.app.shop.exception.ShopAppException;
 import com.app.shop.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Objects;
 
 @Component
-public class CustomJWTDecoder implements JwtDecoder {
+public class JwtDecoderCustom implements JwtDecoder {
     IUserService userService;
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
@@ -24,14 +22,14 @@ public class CustomJWTDecoder implements JwtDecoder {
     private String signerKey;
 
     @Autowired
-    public CustomJWTDecoder(IUserService userService) {
+    public JwtDecoderCustom(IUserService userService) {
         this.userService = userService;
     }
 
     @Override
     public Jwt decode(String token) throws JwtException {
-        if (!userService.introspect(token))
-            throw new ShopAppException(ErrorCode.AUTH_4004);
+        userService.introspect(token);
+        
         if (Objects.isNull(nimbusJwtDecoder)) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS256");
             nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)

@@ -1,7 +1,7 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.user.UserDTO;
-import com.app.shop.response.UserResponse;
+import com.app.shop.dto.request.user.UserReq;
+import com.app.shop.dto.response.UserResponse;
 import com.app.shop.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ class UserControllerTest {
     @MockBean
     IUserService userService;
 
-    private UserDTO userDTO;
+    private UserReq userReq;
     private UserResponse userResponse;
 
     @BeforeEach
@@ -40,7 +40,7 @@ class UserControllerTest {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2000, Calendar.SEPTEMBER, 18);
         Date date = calendar.getTime();
-        userDTO = UserDTO.builder()
+        userReq = UserReq.builder()
                 .fullName("fullname")
                 .phoneNumber("012345678")
                 .password("password")
@@ -63,7 +63,7 @@ class UserControllerTest {
         log.info("Create user valid request success");
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
-        String content = objectMapper.writeValueAsString(userDTO);
+        String content = objectMapper.writeValueAsString(userReq);
         Mockito.when(userService.createUser(ArgumentMatchers.any()))
                 .thenReturn(userResponse);
         // WHEN

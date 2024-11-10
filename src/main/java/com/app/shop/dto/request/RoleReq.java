@@ -1,21 +1,17 @@
-package com.app.shop.response;
+package com.app.shop.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse extends BaseResponse {
-    Long id;
+public class RoleReq {
     String name;
-    float price;
-    String thumbnail;
     String description;
-    long categoryId;
+    Set<String> permissions;
 }
-
-

@@ -1,6 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.RoleDTO;
+import com.app.shop.dto.request.RoleReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IRoleService;
 import lombok.AccessLevel;
@@ -19,9 +19,9 @@ public class RoleController {
     IRoleService roleService;
 
     @PostMapping
-    ResponseEntity<Object> create(@RequestBody RoleDTO roleDTO) {
+    ResponseEntity<Object> create(@RequestBody RoleReq roleReq) {
         return ResponseHandler.execute(
-                roleService.create(roleDTO)
+                roleService.create(roleReq)
         );
     }
 

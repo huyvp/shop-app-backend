@@ -1,23 +1,15 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.CategoryDTO;
+import com.app.shop.dto.request.CategoryReq;
 import com.app.shop.entity.Category;
 import com.app.shop.service.ICategoryService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @Slf4j
@@ -27,12 +19,12 @@ class CategoryControllerTest {
     private MockMvc mockMvc;
     @MockBean
     ICategoryService categoryService;
-    private CategoryDTO categoryDTO;
+    private CategoryReq categoryReq;
     private Category category;
 
     @BeforeEach
     void initData() {
-        categoryDTO = CategoryDTO.builder()
+        categoryReq = CategoryReq.builder()
                 .name("Category")
                 .build();
         category = Category.builder()

@@ -1,4 +1,4 @@
-package com.app.shop.dto.product;
+package com.app.shop.dto.request.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class ProductImageDTO {
+public class ProductImageReq {
     @JsonProperty(value = "product_id")
     @Min(value = 1, message = "VALID_1000")
     private int productId;

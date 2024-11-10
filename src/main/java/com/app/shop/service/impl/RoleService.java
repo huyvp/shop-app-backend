@@ -1,6 +1,6 @@
 package com.app.shop.service.impl;
 
-import com.app.shop.dto.RoleDTO;
+import com.app.shop.dto.request.RoleReq;
 import com.app.shop.entity.Permission;
 import com.app.shop.entity.Role;
 import com.app.shop.exception.ErrorCode;
@@ -8,7 +8,7 @@ import com.app.shop.exception.ShopAppException;
 import com.app.shop.mapper.RoleMapper;
 import com.app.shop.repo.PermissionRepo;
 import com.app.shop.repo.RoleRepo;
-import com.app.shop.response.RoleResponse;
+import com.app.shop.dto.response.RoleResponse;
 import com.app.shop.service.IRoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +29,11 @@ public class RoleService implements IRoleService {
     RoleMapper roleMapper;
 
     @Override
-    public RoleResponse create(RoleDTO roleDTO) {
-        if (roleRepo.findById(roleDTO.getName()).isPresent())
+    public RoleResponse create(RoleReq roleReq) {
+        if (roleRepo.findById(roleReq.getName()).isPresent())
             throw new ShopAppException(ErrorCode.ROLE_3001);
-        List<Permission> permissions = permissionRepo.findAllById(roleDTO.getPermissions());
-        Role role = roleMapper.toRole(roleDTO);
+        List<Permission> permissions = permissionRepo.findAllById(roleReq.getPermissions());
+        Role role = roleMapper.toRole(roleReq);
         role.setPermissions(new HashSet<>(permissions));
 
         return roleMapper.toRoleResponse(roleRepo.save(role));

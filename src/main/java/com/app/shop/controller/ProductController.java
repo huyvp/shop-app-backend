@@ -1,8 +1,8 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.product.ProductDTO;
+import com.app.shop.dto.request.product.ProductReq;
 import com.app.shop.handler.ResponseHandler;
-import com.app.shop.response.ProductResponse;
+import com.app.shop.dto.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import com.github.javafaker.Faker;
 import jakarta.validation.Valid;
@@ -28,9 +28,9 @@ public class ProductController {
     IProductService productService;
 
     @PostMapping("")
-    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDTO productDTO) throws IOException {
+    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductReq productReq) throws IOException {
         return ResponseHandler.execute(
-                productService.createProduct(productDTO)
+                productService.createProduct(productReq)
         );
     }
 
@@ -53,8 +53,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
-        productService.updateProduct(id, productDTO);
+    public ResponseEntity<Object> updateProduct(@PathVariable int id, @RequestBody ProductReq productReq) {
+        productService.updateProduct(id, productReq);
         return ResponseHandler.execute();
     }
 
@@ -77,14 +77,14 @@ public class ProductController {
         for (int i = 0; i < 100; i++) {
             String name = faker.commerce().productName();
             if (productService.existsByName(name)) continue;
-            ProductDTO productDTO = ProductDTO.builder()
+            ProductReq productReq = ProductReq.builder()
                     .name(name)
                     .price(faker.number().numberBetween(10, 90_000_000))
                     .description(faker.lorem().sentence())
                     .thumbnail("")
                     .categoryId(faker.number().numberBetween(2, 5))
                     .build();
-            productService.createProduct(productDTO);
+            productService.createProduct(productReq);
         }
         return "DONE";
     }

@@ -1,9 +1,9 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.user.UserDTO;
-import com.app.shop.dto.user.UserUpdateDTO;
+import com.app.shop.dto.request.user.UserReq;
+import com.app.shop.dto.request.user.UserUpdateReq;
 import com.app.shop.handler.ResponseHandler;
-import com.app.shop.response.UserResponse;
+import com.app.shop.dto.response.UserResponse;
 import com.app.shop.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -26,9 +26,9 @@ public class UserController {
     IUserService userService;
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserReq userReq) {
         return ResponseHandler.execute(
-                userService.createUser(userDTO)
+                userService.createUser(userReq)
         );
     }
 
@@ -40,9 +40,9 @@ public class UserController {
 
     @PutMapping(value = "{id}")
     public ResponseEntity<Object> updateUser(@PathVariable int id,
-                                             @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+                                             @RequestBody @Valid UserUpdateReq userUpdateReq) {
         return ResponseHandler.execute(
-                userService.updateUser(id, userUpdateDTO)
+                userService.updateUser(id, userUpdateReq)
         );
     }
 

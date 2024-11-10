@@ -1,0 +1,9 @@
+jwt:
+  valid-duration: 7200
+  refreshable-duration: 120
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DBMS_USERNAME:postgres}
+    password: ${DBMS_PASSWORD:hh1122334455}
+    url: ${DBMS_URL:jdbc:postgresql://localhost:5432/shop}

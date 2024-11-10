@@ -1,17 +1,14 @@
-package com.app.shop.response;
+package com.app.shop.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleResponse {
+public class PermissionResponse {
     String name;
     String description;
-    Set<PermissionResponse> permissions;
 }

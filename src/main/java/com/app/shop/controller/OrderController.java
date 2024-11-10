@@ -1,8 +1,8 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.order.OrderDTO;
+import com.app.shop.dto.request.order.OrderReq;
 import com.app.shop.handler.ResponseHandler;
-import com.app.shop.response.OrderResponse;
+import com.app.shop.dto.response.OrderResponse;
 import com.app.shop.service.IOrderService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -24,16 +24,16 @@ public class OrderController {
     IOrderService orderService;
 
     @PostMapping()
-    public ResponseEntity<Object> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<Object> createOrder(@Valid @RequestBody OrderReq orderReq) {
         return ResponseHandler.execute(
-                orderService.createOrder(orderDTO)
+                orderService.createOrder(orderReq)
         );
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Object> updateOrder(@Valid @PathVariable int id,
-                                              @Valid @RequestBody OrderDTO orderDTO) {
-        orderService.updateOrder(id, orderDTO);
+                                              @Valid @RequestBody OrderReq orderReq) {
+        orderService.updateOrder(id, orderReq);
         return ResponseHandler.execute();
     }
 
@@ -62,7 +62,7 @@ public class OrderController {
         return ResponseHandler.execute(orders, totalPages);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Object> getOrders(
             @RequestParam("limit") int limit,
             @RequestParam("page") int page) {

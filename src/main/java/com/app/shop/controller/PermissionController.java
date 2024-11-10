@@ -1,6 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.PermissionDTO;
+import com.app.shop.dto.request.PermissionReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IPermissionService;
 import lombok.AccessLevel;
@@ -19,9 +19,9 @@ public class PermissionController {
     IPermissionService permissionService;
 
     @PostMapping
-    ResponseEntity<Object> create(@RequestBody PermissionDTO permissionDTO) {
+    ResponseEntity<Object> create(@RequestBody PermissionReq permissionReq) {
         return ResponseHandler.execute(
-                permissionService.create(permissionDTO)
+                permissionService.create(permissionReq)
         );
     }
 

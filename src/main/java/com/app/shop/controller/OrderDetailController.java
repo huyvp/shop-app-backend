@@ -1,6 +1,6 @@
 package com.app.shop.controller;
 
-import com.app.shop.dto.orderDetail.OrderDetailDTO;
+import com.app.shop.dto.request.orderDetail.OrderDetailReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.impl.OrderDetailService;
 import jakarta.validation.Valid;
@@ -18,9 +18,9 @@ public class OrderDetailController {
     OrderDetailService orderDetailService;
 
     @PostMapping
-    public ResponseEntity<Object> createOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
+    public ResponseEntity<Object> createOrderDetail(@Valid @RequestBody OrderDetailReq orderDetailReq) {
         return ResponseHandler.execute(
-                orderDetailService.create(orderDetailDTO)
+                orderDetailService.create(orderDetailReq)
         );
     }
 
@@ -40,9 +40,9 @@ public class OrderDetailController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateOrderDetail(@Valid @PathVariable("id") Long id,
-                                                    @RequestBody OrderDetailDTO orderDetailDTO) {
+                                                    @RequestBody OrderDetailReq orderDetailReq) {
         return ResponseHandler.execute(
-                orderDetailService.update(id, orderDetailDTO)
+                orderDetailService.update(id, orderDetailReq)
         );
     }
 

@@ -1,4 +1,4 @@
-package com.app.shop.dto.order;
+package com.app.shop.dto.request.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
