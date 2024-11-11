@@ -36,7 +36,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.POST, ENDPOINTS).permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs").permitAll()
+                .anyRequest().permitAll()
         );
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2

@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         AppResponse<Object> appResponse = AppResponse.builder()
                 .code(ErrorCode.UNCATEGORIZED.getCode())
                 .status(HttpStatus.BAD_REQUEST)
-                .message(Translator.toLocale(ex.getMessage()))
+                .message(ex.getMessage())
                 .build();
         return new ResponseEntity<>(appResponse, HttpStatus.BAD_REQUEST);
     }
