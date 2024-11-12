@@ -4,6 +4,7 @@ import com.app.shop.dto.request.order.OrderReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.dto.response.OrderResponse;
 import com.app.shop.service.IOrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "order")
 public class OrderController {
     IOrderService orderService;
 

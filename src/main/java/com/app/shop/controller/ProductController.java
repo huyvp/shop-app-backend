@@ -5,6 +5,7 @@ import com.app.shop.handler.ResponseHandler;
 import com.app.shop.dto.response.ProductResponse;
 import com.app.shop.service.IProductService;
 import com.github.javafaker.Faker;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "product")
 public class ProductController {
     IProductService productService;
 

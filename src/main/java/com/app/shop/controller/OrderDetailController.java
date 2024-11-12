@@ -3,6 +3,7 @@ package com.app.shop.controller;
 import com.app.shop.dto.request.orderDetail.OrderDetailReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.impl.OrderDetailService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/order_details")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "order detail")
 public class OrderDetailController {
     OrderDetailService orderDetailService;
 

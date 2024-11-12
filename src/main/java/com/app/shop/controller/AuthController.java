@@ -3,6 +3,7 @@ package com.app.shop.controller;
 import com.app.shop.dto.request.user.UserLoginReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "auth")
 public class AuthController {
     IUserService userService;
 

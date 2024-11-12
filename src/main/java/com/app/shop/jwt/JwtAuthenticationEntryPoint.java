@@ -1,5 +1,6 @@
 package com.app.shop.jwt;
 
+import com.app.shop.configuration.Translator;
 import com.app.shop.exception.ErrorCode;
 import com.app.shop.dto.response.AppResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         AppResponse<?> appResponse = AppResponse.builder()
                 .code(errorCode.getCode())
-                .message(errorCode.getMessage())
+//                .message(Translator.toLocale(errorCode.getMessage()))
+                .message(authException.getMessage())
                 .status(errorCode.getHttpStatus())
                 .build();
         ObjectMapper objectMapper = new ObjectMapper();

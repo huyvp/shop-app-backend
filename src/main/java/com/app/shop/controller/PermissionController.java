@@ -3,6 +3,7 @@ package com.app.shop.controller;
 import com.app.shop.dto.request.PermissionReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.service.IPermissionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
+@Tag(name = "permission")
 public class PermissionController {
     IPermissionService permissionService;
 

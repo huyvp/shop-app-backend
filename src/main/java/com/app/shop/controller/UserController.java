@@ -5,6 +5,7 @@ import com.app.shop.dto.request.user.UserUpdateReq;
 import com.app.shop.handler.ResponseHandler;
 import com.app.shop.dto.response.UserResponse;
 import com.app.shop.service.IUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
+@Tag(name = "user")
 public class UserController {
     IUserService userService;
 

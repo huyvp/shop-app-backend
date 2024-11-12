@@ -22,7 +22,14 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] ENDPOINTS = {"api/v1/auth/*", "api/v1/users"};
+    private final String[] INIT_ENDPOINTS =
+            {"/auth/*", "/users"};
+    private final String[] SWAGGER_ENDPOINTS =
+            {
+                    "/swagger-ui/**", "/swagger-ui.html",
+                    "/api-docs", "/api-docs/**"
+            };
+
     @Value("${jwt.signerKey}")
     protected String signingKey;
     private final JwtDecoderCustom jwtDecoderCustom;
@@ -35,9 +42,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers(HttpMethod.POST, ENDPOINTS).permitAll()
-                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs").permitAll()
-                .anyRequest().permitAll()
+                .requestMatchers(HttpMethod.POST, INIT_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.GET, SWAGGER_ENDPOINTS).permitAll()
+                .anyRequest().authenticated()
         );
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
